@@ -1,0 +1,27 @@
+rgb_ref,din_net,dout_net,notes
+RGB1,LED_DIN,RGB1_DOUT,phase-1 validate first 4
+RGB2,RGB1_DOUT,RGB2_DOUT,phase-1 validate first 4
+RGB3,RGB2_DOUT,RGB3_DOUT,phase-1 validate first 4
+RGB4,RGB3_DOUT,RGB4_DOUT,phase-1 validate first 4
+RGB5,RGB4_DOUT,RGB5_DOUT,replicate after phase-1
+RGB6,RGB5_DOUT,RGB6_DOUT,replicate after phase-1
+RGB7,RGB6_DOUT,RGB7_DOUT,replicate after phase-1
+RGB8,RGB7_DOUT,RGB8_DOUT,replicate after phase-1
+RGB9,RGB8_DOUT,RGB9_DOUT,replicate after phase-1
+RGB10,RGB9_DOUT,RGB10_DOUT,replicate after phase-1
+RGB11,RGB10_DOUT,RGB11_DOUT,replicate after phase-1
+RGB12,RGB11_DOUT,RGB12_DOUT,replicate after phase-1
+RGB13,RGB12_DOUT,RGB13_DOUT,replicate after phase-1
+RGB14,RGB13_DOUT,RGB14_DOUT,replicate after phase-1
+RGB15,RGB14_DOUT,RGB15_DOUT,replicate after phase-1
+RGB16,RGB15_DOUT,RGB16_DOUT,replicate after phase-1
+RGB17,RGB16_DOUT,RGB17_DOUT,replicate after phase-1
+RGB18,RGB17_DOUT,RGB18_DOUT,replicate after phase-1
+RGB19,RGB18_DOUT,RGB19_DOUT,replicate after phase-1
+RGB20,RGB19_DOUT,RGB20_DOUT,replicate after phase-1
+RGB21,RGB20_DOUT,RGB21_DOUT,replicate after phase-1
+RGB22,RGB21_DOUT,RGB22_DOUT,replicate after phase-1
+RGB23,RGB22_DOUT,RGB23_DOUT,replicate after phase-1
+RGB24,RGB23_DOUT,RGB24_DOUT,replicate after phase-1
+RGB25,RGB24_DOUT,RGB25_DOUT,replicate after phase-1
+RGB26,RGB25_DOUT,RGB26_DOUT,replicate after phase-1

@@ -1,0 +1,42 @@
+Rev-B RGB Phase 1 (Safe Template)
+Date: 2026-03-01
+
+Goal
+- Implement per-key RGB on SW1-SW4 first to validate:
+  - Footprint orientation
+  - DIN/DOUT chain direction
+  - 5V/GND routing strategy
+  - Clearance with hotswap sockets and case
+
+Placement source
+- File: RGB_PHASE1_PLACEMENT.csv
+- Keys included: SW1, SW2, SW3, SW4
+
+Recommended temporary designators
+- RGB1 near SW1
+- RGB2 near SW2
+- RGB3 near SW3
+- RGB4 near SW4
+
+Net template
+- RGB data in from existing chain input: LED_DIN
+- RGB1 DIN  <- LED_DIN
+- RGB1 DOUT -> RGB2_DIN
+- RGB2 DOUT -> RGB3_DIN
+- RGB3 DOUT -> RGB4_DIN
+- RGB4 DOUT -> RGB_DOUT_PHASE1 (test/export)
+- All RGBx VDD -> 5V
+- All RGBx GND -> GND
+
+Required pass criteria before scaling to all 26
+1. KiCad DRC: 0 violations, 0 unconnected.
+2. Visual orientation check:
+   - DIN/DOUT pins face expected routing direction across SW1-SW4 chain.
+3. Mechanical sanity:
+   - No overlap with switch/hotswap pads.
+   - No encroachment into mounting holes/keepouts.
+4. Power sanity:
+   - Existing C401 bulk cap remains valid for startup tests.
+
+Scale-up rule
+- Once phase-1 passes, replicate same LED orientation and chain direction across SW5-SW26.

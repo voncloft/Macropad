@@ -1,0 +1,32 @@
+Rev-B Next Actions (Immediate)
+Date: 2026-03-01
+
+Already completed
+- RGB_DATA naming standardized in PCB/schematic.
+- HALL_OUT net created in PCB; U901 pad 35 assigned.
+- Display opening and pocket enlarged in case generator and STLs regenerated.
+
+Next implementation pass
+1) Schematic device additions
+- Add hall sensor symbol (3V3/GND/HALL_OUT) and optional RC filter footprint.
+- Add per-key RGB LED symbols (WS2812/SK6812 class) and chain labels.
+- Confirm RGB_DATA -> first LED DIN path and LED_DIN intermediary node strategy.
+
+2) PCB additions/routing
+- Place hall sensor footprint at intended edge/control location.
+- Add at least one Hall testpoint on HALL_OUT.
+- Place per-key RGB footprints and route daisy chain DIN/DOUT.
+- Add bulk capacitor near RGB 5V entry and local decoupling near chain start.
+
+3) Validation
+- Run KiCad DRC after each major placement/routing chunk.
+- Regenerate production exports only after DRC returns 0/0.
+
+Notes
+- Do not change encoder or LCD I2C pin assignments unless conflicts appear.
+- Keep reset-hole alignment tied to SW402 current location.
+
+Template artifacts now available
+- RGB_ALL26_PLACEMENT.csv
+- RGB_ALL26_CHAIN.csv
+- tools/generate_rgb_chain_template.py

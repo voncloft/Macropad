@@ -1,0 +1,14 @@
+REV-B Proposed Pin Assignment (First Pass)
+Generated: 2026-03-01
+
+RGB data in: pad 23 (existing signal now named RGB_DATA) -> net RGB_DATA
+Hall analog in: pad 35 (currently NC) -> net HALL_OUT
+Display bus: keep existing LCD_SDA/LCD_SCL nets on pads 33/34
+Encoder: keep existing ENC_A/ENC_B/ENC_SW on pads 30/31/32
+
+Reserved NC pads for future use: 8, 9, 10, 11, 13, 14, 15, 16, 24, 25, 26, 27, 36, 37, 38, 39
+
+Notes
+- Final GPIO legality must be cross-checked against ESP32-S3 strapping/boot constraints.
+- If pad 35 ADC mapping is unsuitable, swap hall to pad 36 or 37.
+- Power/current firmware limits must be enabled before high-brightness RGB tests.

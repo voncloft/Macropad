@@ -26,10 +26,10 @@
   (text "IR: IR_TX output + IR_RX input (for TV/projector remote control codes)" (at 20.00 38.00 0)
     (effects (font (size 1.2 1.2) (thickness 0.2)))
   )
-  (text "LED: LED_DATA (MCU) -> 330R -> LED_DIN, plus 5V/GND (WS2812/SK6812 chain)" (at 20.00 42.00 0)
+  (text "LED: RGB_DATA (MCU) -> 330R -> LED_DIN, plus 5V/GND (WS2812/SK6812 chain)" (at 20.00 42.00 0)
     (effects (font (size 1.2 1.2) (thickness 0.2)))
   )
-  (text "LCD: LCD_SDA/LCD_SCL (I2C) + 3V3/GND on J302" (at 20.00 44.50 0)
+  (text "LCD: SPI data/clock + power on J302; control (CS/DC/RST/BL) on J303" (at 20.00 44.50 0)
     (effects (font (size 1.2 1.2) (thickness 0.2)))
   )
   (text "Electrical notes: 330R in LED data line, 470uF+ cap on LED 5V rail, level shifter 3V3->5V for LED data." (at 20.00 46.00 0)
@@ -2545,7 +2545,7 @@
       (at 332.00 159.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     )
-    (property "Value" "LCD_I2C"
+    (property "Value" "LCD_SPI_PWRDATA"
       (at 332.00 149.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     )
@@ -2844,7 +2844,7 @@
     (stroke (width 0) (type default))
     (uuid be9024e1-e11c-4cc1-bb03-e8ef067e0189)
   )
-  (global_label "LED_DATA"
+  (global_label "RGB_DATA"
     (shape input)
     (at 322.92 79.08 180)
     (fields_autoplaced)
@@ -2916,7 +2916,7 @@
     (stroke (width 0) (type default))
     (uuid 425e0108-66f2-4ba4-a6f6-0fe07298e738)
   )
-  (global_label "LCD_SDA"
+  (global_label "LCD_MOSI"
     (shape input)
     (at 322.92 63.84 180)
     (fields_autoplaced)
@@ -2928,7 +2928,7 @@
     (stroke (width 0) (type default))
     (uuid 7d3dc103-6933-4128-be53-4f370ed21896)
   )
-  (global_label "LCD_SCL"
+  (global_label "LCD_SCLK"
     (shape input)
     (at 322.92 61.30 180)
     (fields_autoplaced)
@@ -3036,7 +3036,7 @@
     (stroke (width 0) (type default))
     (uuid 4229203d-ad32-4e88-a415-2cca944517a2)
   )
-  (global_label "LCD_SDA"
+  (global_label "LCD_MOSI"
     (shape input)
     (at 322.92 151.46 180)
     (fields_autoplaced)
@@ -3048,7 +3048,7 @@
     (stroke (width 0) (type default))
     (uuid dfb190ba-72b7-4cd4-8ee2-c321c087bce7)
   )
-  (global_label "LCD_SCL"
+  (global_label "LCD_SCLK"
     (shape input)
     (at 322.92 148.92 180)
     (fields_autoplaced)
@@ -3096,7 +3096,7 @@
     (stroke (width 0) (type default))
     (uuid 89e2f5e2-5bf9-46ea-b30b-3a3203f29eb9)
   )
-  (global_label "LED_DATA"
+  (global_label "RGB_DATA"
     (shape input)
     (at 301.00 150.00 180)
     (fields_autoplaced)
@@ -3679,7 +3679,7 @@
 		(path "/de0f2132-b650-443b-ab7d-9cf5cfc34e4d"
 			(reference "J302")
 			(unit 1)
-			(value "LCD_I2C")
+			(value "LCD_SPI_PWRDATA")
 			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical")
 		)
 		(path "/148cdbe0-aa5c-49be-9664-77f6b6e912be"

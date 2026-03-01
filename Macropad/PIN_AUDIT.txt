@@ -1,0 +1,50 @@
+MCU Pin/Net Audit (U901)
+Generated: 2026-03-01
+
+Pad	Net
+1	GND
+2	3V3
+3	EN
+4	ROW0
+5	ROW1
+6	ROW2
+7	ROW3
+8	(NC)
+9	(NC)
+10	(NC)
+11	(NC)
+12	ROW4
+13	(NC)
+14	(NC)
+15	(NC)
+16	(NC)
+17	ROW5
+18	COL0
+19	COL1
+20	COL2
+21	COL3
+22	COL4
+23	LED_DATA
+24	(NC)
+25	(NC)
+26	(NC)
+27	(NC)
+28	IR_RX
+29	IR_TX
+30	ENC_A
+31	ENC_B
+32	ENC_SW
+33	LCD_SDA
+34	LCD_SCL
+35	(NC)
+36	(NC)
+37	(NC)
+38	(NC)
+39	(NC)
+40	GND
+41	GND
+
+Total pads captured: 41
+Used signal pads (excluding power/ground): 20
+NC pads available: 17
+Candidate NC pads must be validated against ESP32-S3 constraints before assignment.

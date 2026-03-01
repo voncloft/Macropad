@@ -20,13 +20,14 @@ import trimesh
 
 
 # -------- User-editable parameters --------
-PCB_PATH = Path("/home/von/Desktop/Macropad/Macropad.kicad_pcb")
-PRODUCTION_BOM_PATH = Path("/home/von/Desktop/Macropad/production/bom.csv")
-PRODUCTION_POS_PATH = Path("/home/von/Desktop/Macropad/production/positions.csv")
-GERBER_EDGE_PATH = Path("/home/von/Desktop/Macropad/gerber/Macropad-Edge_Cuts.gm1")
-OUTPUT_BOTTOM_STL = Path("/home/von/Desktop/case/macropad_case_bottom.stl")
-OUTPUT_TOP_STL = Path("/home/von/Desktop/case/macropad_case_top.stl")
-OUTPUT_SIDE_BY_SIDE_STL = Path("/home/von/Desktop/case/macropad_case_side_by_side.stl")
+PCB_PATH = Path("/home/von/Desktop/Macropad Project/Macropad/Macropad.kicad_pcb")
+PRODUCTION_BOM_PATH = Path("/home/von/Desktop/Macropad Project/Macropad/production/bom.csv")
+PRODUCTION_POS_PATH = Path("/home/von/Desktop/Macropad Project/Macropad/production/positions.csv")
+GERBER_EDGE_PATH = Path("/home/von/Desktop/Macropad Project/Macropad/gerber/Macropad-Edge_Cuts.gm1")
+OUTPUT_BOTTOM_STL = Path("/home/von/Desktop/Macropad Project/case/macropad_case_bottom.stl")
+OUTPUT_TOP_STL = Path("/home/von/Desktop/Macropad Project/case/macropad_case_top.stl")
+OUTPUT_SIDE_BY_SIDE_STL = Path("/home/von/Desktop/Macropad Project/case/macropad_case_side_by_side.stl")
+OUTPUT_ASSEMBLED_STL = Path("/home/von/Desktop/Macropad Project/case/macropad_case_assembled.stl")
 
 WALL = 2.4
 TOP_THICKNESS = 2.2
@@ -42,36 +43,46 @@ SWITCH_HOLE_SIZE = (14.1, 14.1)
 
 # OLED/LCD flush mount zone at top.
 # View window: what you actually see.
-OLED_WINDOW_SIZE = (23.0, 6.5)
-# Module face size (0.91in module class, approx from your notes).
-LCD_MODULE_FACE_SIZE = (30.0, 11.5)
+OLED_WINDOW_SIZE = (66.0, 50.0)
+# Module face size tuned for a large rectangular display module (2.0in-class TFT/OLED board envelope).
+LCD_MODULE_FACE_SIZE = (72.0, 56.0)
 LCD_MODULE_FACE_CLEARANCE = 0.25
 LCD_FLUSH_DEPTH = 1.6
 # Hidden underside relief so solder joints/wires fit while top remains flush.
-LCD_BACK_RELIEF_SIZE = (26.0, 9.0)
+LCD_BACK_RELIEF_SIZE = (69.0, 38.0)
 LCD_BACK_RELIEF_CLEARANCE = 0.6
 LCD_BACK_RELIEF_DEPTH = 5.5
 # Small tool/wire channel on the header side of the module.
-LCD_SOLDER_CHANNEL_SIZE = (8.0, 3.0)
-LCD_SOLDER_CHANNEL_Y_OFFSET = -6.0
+LCD_SOLDER_CHANNEL_SIZE = (16.0, 6.0)
+LCD_SOLDER_CHANNEL_Y_OFFSET = -28.0
 OLED_WINDOW_ANCHOR_REF = "J302"
-OLED_OFFSET_FROM_ANCHOR = (-11.0, 12.0)
+OLED_OFFSET_FROM_ANCHOR = (-39.10, 13.6)
+
+# Local underside relief for LCD rear connector/solder joints.
+LCD_BACK_PORT_ESCAPE_SIZE = (34.0, 12.0)  # (x span, y span)
+LCD_BACK_PORT_ESCAPE_Y_OFFSET = -27.0     # toward top edge of case
+LCD_BACK_PORT_ESCAPE_DEPTH = 5.5
 
 # Rotary encoder top circle opening (missing previously).
 ROTARY_HOLE_ANCHOR_REF = "SW401"
 ROTARY_HOLE_DIAMETER = 8.0
 
 # MSS-102545-14A-V-SMT side switch slot.
-SIDE_SWITCH_SLOT = (8.2, 3.0)  # (y span, z span)
+SIDE_SWITCH_SLOT = (4.6, 1.8)  # visible actuator slot: (y span, z span)
 SIDE_SWITCH_ANCHOR_REF = "J302"
 SIDE_SWITCH_FROM_ANCHOR_Y = 5.0
 SIDE_SWITCH_Z = CASE_HEIGHT * 0.50
+SIDE_SWITCH_BODY_CLEARANCE = (7.2, 2.8)  # hidden internal clearance: (y span, z span)
 
-# Two top access holes for reset/flash pins.
-RESET_HOLE_DIAMETER = 2.0
-RESET_HOLE_SPACING = 2.54
-RESET_ANCHOR_REF = "U901"
-RESET_OFFSET_FROM_ANCHOR = (8.75, 3.0)  # true ESP right-side pin region
+# Bottom reset-button access, aligned to PCB tactile switch.
+RESET_BUTTON_ANCHOR_REF = "SW402"
+RESET_BUTTON_HOLE_DIAMETER = 4.4
+RESET_BUTTON_OFFSET = (0.0, 0.0)
+# Ensure reset tunnel reaches through internal riser/supports.
+RESET_BUTTON_TUNNEL_TOP_EXTRA = 1.2
+# Recess opening a bit so short actuators are easier to use.
+RESET_BUTTON_RECESS_DIAMETER = 7.0
+RESET_BUTTON_RECESS_DEPTH = 1.4
 
 # IR holes (from J201/J202 positions on PCB, front wall).
 IR_HOLE_DIAMETER = 3.3
@@ -79,8 +90,9 @@ IR_HOLE_Z = CASE_HEIGHT * 0.50
 
 # USB-C front cutout (from J402).
 USB_CUTOUT_ANCHOR_REF = "J402"
-USB_CUTOUT_SIZE = (10.0, 4.2)  # (x span, z span)
+USB_CUTOUT_SIZE = (9.2, 3.2)  # USB-C shell opening: (x span, z span)
 USB_CUTOUT_Z = BOTTOM_THICKNESS + 6.0
+USB_CUTOUT_INNER_SIZE = (8.6, 2.8)  # inner relief behind outer lip: (x span, z span)
 
 # PCB mounting standoffs (from H1..H4 mounting holes).
 PCB_STANDOFF_REFS = ("H1", "H2", "H3", "H4")
@@ -106,6 +118,22 @@ BATTERY_TO_PCB_CLEARANCE = 1.2
 # Split and preview spacing.
 SPLIT_Z = CASE_HEIGHT * 0.72
 PREVIEW_GAP_X = 14.0
+
+# Snap-fit lip between bottom/top shells at the split seam.
+SNAP_LIP_ENABLED = True
+SNAP_LIP_INSET = 0.55
+SNAP_LIP_THICKNESS = 1.10
+SNAP_LIP_HEIGHT = 1.80
+SNAP_LIP_CLEARANCE = 0.15
+SNAP_LIP_GROOVE_EXTRA_DEPTH = 0.60
+
+# Serviceable/re-openable snap tuning.
+SNAP_RELEASE_GAP = 16.0
+PRY_SLOT_WIDTH = 12.0
+PRY_SLOT_HEIGHT = 2.8
+
+# Mirror top-side cutouts across X to match board orientation.
+MIRROR_TOP_FEATURES_X = True
 
 
 @dataclass
@@ -234,7 +262,7 @@ def main() -> None:
         "J402",
         "SW401",
         SIDE_SWITCH_ANCHOR_REF,
-        RESET_ANCHOR_REF,
+        RESET_BUTTON_ANCHOR_REF,
         USB_CUTOUT_ANCHOR_REF,
         OLED_WINDOW_ANCHOR_REF,
         ROTARY_HOLE_ANCHOR_REF,
@@ -323,7 +351,8 @@ def main() -> None:
         ref = f"SW{idx}"
         if ref not in fps:
             continue
-        fx, fy = pcb_to_case(fps[ref].x, fps[ref].y)
+        fx_raw, fy = pcb_to_case(fps[ref].x, fps[ref].y)
+        fx = outer_x - fx_raw if MIRROR_TOP_FEATURES_X else fx_raw
         sx, sy = SWITCH_HOLE_SIZE
         cutters.append(
             box_mesh(
@@ -334,10 +363,11 @@ def main() -> None:
 
     # LCD/OLED flush mount: top recess for module face + through view window.
     oled_anchor = fps[OLED_WINDOW_ANCHOR_REF]
-    ox, oy = pcb_to_case(
+    ox_raw, oy = pcb_to_case(
         oled_anchor.x + OLED_OFFSET_FROM_ANCHOR[0],
         oled_anchor.y + OLED_OFFSET_FROM_ANCHOR[1],
     )
+    ox = outer_x - ox_raw if MIRROR_TOP_FEATURES_X else ox_raw
     ow, oh = OLED_WINDOW_SIZE
     mw, mh = LCD_MODULE_FACE_SIZE
     pocket_w = mw + 2.0 * LCD_MODULE_FACE_CLEARANCE
@@ -358,31 +388,20 @@ def main() -> None:
             (ox + ow / 2.0, oy + oh / 2.0, outer_z + 1.5),
         )
     )
-
-    # Backside relief cavity for solder joints and module body clearance.
-    rw, rh = LCD_BACK_RELIEF_SIZE
-    rw += 2.0 * LCD_BACK_RELIEF_CLEARANCE
-    rh += 2.0 * LCD_BACK_RELIEF_CLEARANCE
+    # Minimal underside relief behind LCD rear port for solder/wire escape.
+    exw, exh = LCD_BACK_PORT_ESCAPE_SIZE
+    ecy = oy + LCD_BACK_PORT_ESCAPE_Y_OFFSET
     cutters.append(
         box_mesh(
-            (ox - rw / 2.0, oy - rh / 2.0, outer_z - LCD_FLUSH_DEPTH - LCD_BACK_RELIEF_DEPTH),
-            (ox + rw / 2.0, oy + rh / 2.0, outer_z - LCD_FLUSH_DEPTH + 0.2),
-        )
-    )
-
-    # Header-side solder/tool channel.
-    cw, ch = LCD_SOLDER_CHANNEL_SIZE
-    cy = oy + LCD_SOLDER_CHANNEL_Y_OFFSET
-    cutters.append(
-        box_mesh(
-            (ox - cw / 2.0, cy - ch / 2.0, outer_z - LCD_FLUSH_DEPTH - LCD_BACK_RELIEF_DEPTH),
-            (ox + cw / 2.0, cy + ch / 2.0, outer_z - LCD_FLUSH_DEPTH + 0.2),
+            (ox - exw / 2.0, ecy - exh / 2.0, outer_z - LCD_FLUSH_DEPTH - LCD_BACK_PORT_ESCAPE_DEPTH),
+            (ox + exw / 2.0, ecy + exh / 2.0, outer_z - LCD_FLUSH_DEPTH + 0.2),
         )
     )
 
     # Rotary encoder circle opening.
     enc_anchor = fps[ROTARY_HOLE_ANCHOR_REF]
-    ex, ey = pcb_to_case(enc_anchor.x, enc_anchor.y)
+    ex_raw, ey = pcb_to_case(enc_anchor.x, enc_anchor.y)
+    ex = outer_x - ex_raw if MIRROR_TOP_FEATURES_X else ex_raw
     cutters.append(
         cylinder_z(
             center_xyz=(ex, ey, outer_z - TOP_THICKNESS / 2.0),
@@ -391,35 +410,60 @@ def main() -> None:
         )
     )
 
-    # Side switch slot on right wall (MSS-102545-14A-V-SMT).
+    # Side switch slot on right wall (MSS-102545-14A-V-SMT): narrow actuator slot + internal body clearance.
     side_anchor = fps[SIDE_SWITCH_ANCHOR_REF]
     side_y_anchor = pcb_to_case(side_anchor.x, side_anchor.y)[1] + SIDE_SWITCH_FROM_ANCHOR_Y
     slot_y, slot_z = SIDE_SWITCH_SLOT
+    body_y, body_z = SIDE_SWITCH_BODY_CLEARANCE
+
+    # Visible external actuator slit.
     cutters.append(
         box_mesh(
             (outer_x - WALL - 1.0, side_y_anchor - slot_y / 2.0, SIDE_SWITCH_Z - slot_z / 2.0),
             (outer_x + 2.0, side_y_anchor + slot_y / 2.0, SIDE_SWITCH_Z + slot_z / 2.0),
         )
     )
-
-    # Two top reset/program access pin holes near ESP module area.
-    reset_anchor = fps[RESET_ANCHOR_REF]
-    rx_base, ry_base = pcb_to_case(
-        reset_anchor.x + RESET_OFFSET_FROM_ANCHOR[0], reset_anchor.y + RESET_OFFSET_FROM_ANCHOR[1]
-    )
-    r = RESET_HOLE_DIAMETER / 2.0
-    for dx in (-RESET_HOLE_SPACING / 2.0, RESET_HOLE_SPACING / 2.0):
-        cutters.append(
-            cylinder_z(
-                center_xyz=(rx_base + dx, ry_base, outer_z - TOP_THICKNESS / 2.0),
-                radius=r,
-                length=TOP_THICKNESS + 3.0,
-            )
+    # Hidden internal clearance so the slider body/lever does not bind.
+    cutters.append(
+        box_mesh(
+            (outer_x - WALL - 3.2, side_y_anchor - body_y / 2.0, SIDE_SWITCH_Z - body_z / 2.0),
+            (outer_x - WALL + 0.6, side_y_anchor + body_y / 2.0, SIDE_SWITCH_Z + body_z / 2.0),
         )
+    )
+
+    # Bottom access hole for the tactile reset switch.
+    reset_anchor = fps[RESET_BUTTON_ANCHOR_REF]
+    rx, ry = pcb_to_case(
+        reset_anchor.x + RESET_BUTTON_OFFSET[0],
+        reset_anchor.y + RESET_BUTTON_OFFSET[1],
+    )
+
+    # Cut all the way from underside up through internal supports to the switch.
+    reset_z_min = -1.0
+    reset_z_max = board_underside_z + RESET_BUTTON_TUNNEL_TOP_EXTRA
+    cutters.append(
+        cylinder_z(
+            center_xyz=(rx, ry, (reset_z_min + reset_z_max) / 2.0),
+            radius=RESET_BUTTON_HOLE_DIAMETER / 2.0,
+            length=reset_z_max - reset_z_min,
+        )
+    )
+
+    # Shallow underside recess to help short pushers reach without protruding.
+    cutters.append(
+        cylinder_z(
+            center_xyz=(rx, ry, RESET_BUTTON_RECESS_DEPTH / 2.0),
+            radius=RESET_BUTTON_RECESS_DIAMETER / 2.0,
+            length=RESET_BUTTON_RECESS_DEPTH + 0.6,
+        )
+    )
 
     # IR holes in front wall from J201/J202.
+    # Mirror X because the through-hole IR pair is viewed from the opposite side
+    # relative to the case coordinate frame used for front-wall cutouts.
     for ref in ("J201", "J202"):
-        fx, _fy = pcb_to_case(fps[ref].x, fps[ref].y)
+        fx_raw, _fy = pcb_to_case(fps[ref].x, fps[ref].y)
+        fx = outer_x - fx_raw
         cutters.append(
             cylinder_y(
                 center_xyz=(fx, WALL / 2.0, IR_HOLE_Z),
@@ -428,14 +472,39 @@ def main() -> None:
             )
         )
 
-    # USB-C cutout in front wall from J402.
+    # USB-C front cutout: rounded capsule profile to match connector shell.
     usb = fps[USB_CUTOUT_ANCHOR_REF]
     ux, _uy = pcb_to_case(usb.x, usb.y)
     usb_w, usb_h = USB_CUTOUT_SIZE
+    r = usb_h / 2.0
+    straight = max(0.0, usb_w - 2.0 * r)
+
+    if straight <= 0.05:
+        cutters.append(
+            cylinder_y(
+                center_xyz=(ux, WALL / 2.0, USB_CUTOUT_Z),
+                radius=r,
+                length=WALL + 3.0,
+            )
+        )
+    else:
+        x0 = ux - straight / 2.0
+        x1 = ux + straight / 2.0
+        cutters.append(
+            box_mesh(
+                (x0, -1.0, USB_CUTOUT_Z - r),
+                (x1, WALL + 2.0, USB_CUTOUT_Z + r),
+            )
+        )
+        cutters.append(cylinder_y(center_xyz=(x0, WALL / 2.0, USB_CUTOUT_Z), radius=r, length=WALL + 3.0))
+        cutters.append(cylinder_y(center_xyz=(x1, WALL / 2.0, USB_CUTOUT_Z), radius=r, length=WALL + 3.0))
+
+    # Inner relief pocket behind the outer lip to better clear plug shell.
+    in_w, in_h = USB_CUTOUT_INNER_SIZE
     cutters.append(
         box_mesh(
-            (ux - usb_w / 2.0, -1.0, USB_CUTOUT_Z - usb_h / 2.0),
-            (ux + usb_w / 2.0, WALL + 2.0, USB_CUTOUT_Z + usb_h / 2.0),
+            (ux - in_w / 2.0, WALL - 0.2, USB_CUTOUT_Z - in_h / 2.0),
+            (ux + in_w / 2.0, WALL + 2.6, USB_CUTOUT_Z + in_h / 2.0),
         )
     )
 
@@ -470,6 +539,96 @@ def main() -> None:
         z_min = float(part.bounds[0][2])
         part.apply_translation([0.0, 0.0, -z_min])
 
+    # Add a perimeter lip/groove pair so top and bottom press/snap together.
+    if SNAP_LIP_ENABLED:
+        bottom_top_z = float(bottom.bounds[1][2])
+
+        lip_outer = box_mesh(
+            (SNAP_LIP_INSET, SNAP_LIP_INSET, bottom_top_z),
+            (
+                outer_x - SNAP_LIP_INSET,
+                outer_y - SNAP_LIP_INSET,
+                bottom_top_z + SNAP_LIP_HEIGHT,
+            ),
+        )
+        lip_inner = box_mesh(
+            (
+                SNAP_LIP_INSET + SNAP_LIP_THICKNESS,
+                SNAP_LIP_INSET + SNAP_LIP_THICKNESS,
+                bottom_top_z - 0.2,
+            ),
+            (
+                outer_x - SNAP_LIP_INSET - SNAP_LIP_THICKNESS,
+                outer_y - SNAP_LIP_INSET - SNAP_LIP_THICKNESS,
+                bottom_top_z + SNAP_LIP_HEIGHT + 0.2,
+            ),
+        )
+        bottom_lip = boolean_diff(lip_outer, [lip_inner])
+
+        # Break the perimeter lip in 4 places so the seam can flex/release.
+        g = SNAP_RELEASE_GAP / 2.0
+        release_cutters = [
+            # front
+            box_mesh(
+                (outer_x / 2.0 - g, SNAP_LIP_INSET - 1.0, bottom_top_z - 0.3),
+                (outer_x / 2.0 + g, SNAP_LIP_INSET + SNAP_LIP_THICKNESS + 1.0, bottom_top_z + SNAP_LIP_HEIGHT + 0.3),
+            ),
+            # back
+            box_mesh(
+                (outer_x / 2.0 - g, outer_y - SNAP_LIP_INSET - SNAP_LIP_THICKNESS - 1.0, bottom_top_z - 0.3),
+                (outer_x / 2.0 + g, outer_y - SNAP_LIP_INSET + 1.0, bottom_top_z + SNAP_LIP_HEIGHT + 0.3),
+            ),
+            # left
+            box_mesh(
+                (SNAP_LIP_INSET - 1.0, outer_y / 2.0 - g, bottom_top_z - 0.3),
+                (SNAP_LIP_INSET + SNAP_LIP_THICKNESS + 1.0, outer_y / 2.0 + g, bottom_top_z + SNAP_LIP_HEIGHT + 0.3),
+            ),
+            # right
+            box_mesh(
+                (outer_x - SNAP_LIP_INSET - SNAP_LIP_THICKNESS - 1.0, outer_y / 2.0 - g, bottom_top_z - 0.3),
+                (outer_x - SNAP_LIP_INSET + 1.0, outer_y / 2.0 + g, bottom_top_z + SNAP_LIP_HEIGHT + 0.3),
+            ),
+        ]
+        bottom_lip = boolean_diff(bottom_lip, release_cutters)
+        bottom = boolean_union([bottom, bottom_lip])
+
+        groove_outer_inset = max(0.05, SNAP_LIP_INSET - SNAP_LIP_CLEARANCE)
+        groove_thickness = SNAP_LIP_THICKNESS + 2.0 * SNAP_LIP_CLEARANCE
+        groove_depth = SNAP_LIP_HEIGHT + SNAP_LIP_GROOVE_EXTRA_DEPTH
+
+        groove_outer = box_mesh(
+            (groove_outer_inset, groove_outer_inset, -0.2),
+            (
+                outer_x - groove_outer_inset,
+                outer_y - groove_outer_inset,
+                groove_depth,
+            ),
+        )
+        groove_inner = box_mesh(
+            (groove_outer_inset + groove_thickness, groove_outer_inset + groove_thickness, -0.4),
+            (
+                outer_x - groove_outer_inset - groove_thickness,
+                outer_y - groove_outer_inset - groove_thickness,
+                groove_depth + 0.2,
+            ),
+        )
+        groove = boolean_diff(groove_outer, [groove_inner])
+
+        # Pry slots on left/right walls at seam level for tool-assisted opening.
+        pry_half = PRY_SLOT_WIDTH / 2.0
+        pry_cutters = [
+            box_mesh(
+                (-1.0, outer_y / 2.0 - pry_half, -0.2),
+                (WALL + 1.2, outer_y / 2.0 + pry_half, PRY_SLOT_HEIGHT),
+            ),
+            box_mesh(
+                (outer_x - WALL - 1.2, outer_y / 2.0 - pry_half, -0.2),
+                (outer_x + 1.0, outer_y / 2.0 + pry_half, PRY_SLOT_HEIGHT),
+            ),
+        ]
+
+        top = boolean_diff(top, [groove, *pry_cutters])
+
     OUTPUT_BOTTOM_STL.parent.mkdir(parents=True, exist_ok=True)
     bottom.export(OUTPUT_BOTTOM_STL)
     top.export(OUTPUT_TOP_STL)
@@ -480,11 +639,18 @@ def main() -> None:
     preview = trimesh.util.concatenate([bottom, top_preview])
     preview.export(OUTPUT_SIDE_BY_SIDE_STL)
 
+    # Fully assembled preview STL (top seated on bottom seam).
+    assembled_top = top.copy()
+    assembled_top.apply_translation([0.0, 0.0, float(bottom.bounds[1][2])])
+    assembled = trimesh.util.concatenate([bottom, assembled_top])
+    assembled.export(OUTPUT_ASSEMBLED_STL)
+
     bb = bottom.bounds
     tb = top.bounds
     print(f"Wrote: {OUTPUT_BOTTOM_STL}")
     print(f"Wrote: {OUTPUT_TOP_STL}")
     print(f"Wrote: {OUTPUT_SIDE_BY_SIDE_STL}")
+    print(f"Wrote: {OUTPUT_ASSEMBLED_STL}")
     print(f"Bottom bounds mm: x={bb[1][0]-bb[0][0]:.2f}, y={bb[1][1]-bb[0][1]:.2f}, z={bb[1][2]-bb[0][2]:.2f}")
     print(f"Top bounds mm: x={tb[1][0]-tb[0][0]:.2f}, y={tb[1][1]-tb[0][1]:.2f}, z={tb[1][2]-tb[0][2]:.2f}")
 

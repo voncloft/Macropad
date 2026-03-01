@@ -1,0 +1,85 @@
+2026-03-01
+- Added and iterated parametric case generation workflow in ../case/generate_macropad_case.py.
+- Fixed IR front-wall hole orientation to match PCB side.
+- Added top/bottom seam interlock geometry.
+- Converted seam to serviceable snap with release gaps and pry slots.
+- Added fully assembled STL export: macropad_case_assembled.stl.
+- Mirrored top-feature cutouts (switch matrix, LCD window/recess, rotary) to correct left/right orientation.
+- Adjusted reset access strategy:
+  - Added full-depth tunnel in case generator.
+  - Added shallow recess for shorter reset actuators.
+- Moved SW402 multiple times to clear case stand/leg obstruction and keep distance from battery pocket.
+- Updated SW402-connected EN/GND traces after each relocation.
+- Re-ran KiCad DRC after PCB edits; final state is clean (0 violations, 0 unconnected).
+- Regenerated all case STLs after geometry/PCB alignment changes:
+  - macropad_case_bottom.stl
+  - macropad_case_top.stl
+  - macropad_case_side_by_side.stl
+  - macropad_case_assembled.stl
+
+Planned Rev-B Feature Set (in progress)
+- #1 Per-key RGB for layer/power status.
+- #3 Larger display with firmware UI pages/animations.
+- #4 Encoder behavior profiles by layer/app.
+- #5 Hall-effect analog control input.
+
+2026-03-01 (Rev-B start pass)
+- Increased display geometry in case generator for a larger module/window:
+  - OLED_WINDOW_SIZE: 26.0 x 8.0
+  - LCD_MODULE_FACE_SIZE: 34.0 x 14.0
+  - LCD_BACK_RELIEF_SIZE: 30.0 x 11.0
+- Regenerated all STL outputs after display-size update.
+- Renamed project signal LED_DATA -> RGB_DATA in PCB/schematic to align with per-key RGB integration naming.
+- Re-ran KiCad DRC after net rename; clean (0 violations, 0 unconnected).
+- Added new PCB net HALL_OUT and assigned U901 pad 35 to HALL_OUT for hall-sensor integration groundwork.
+- Re-ran KiCad DRC after HALL_OUT assignment; clean (0 violations, 0 unconnected).
+- Added initial firmware scaffold for Rev-B features:
+  - firmware/README.md
+  - firmware/kmk/main.py
+  Includes structure for RGB layer colors, power overlay, OLED page framework,
+  encoder profiles, and hall input mapping hooks.
+- Added safe per-key RGB phase-1 implementation artifacts:
+  - RGB_PHASE1_PLACEMENT.csv (SW1-SW4 placement template from PCB coordinates)
+  - REV_B_RGB_PHASE1_TEMPLATE.txt (validated 4-key chain rollout checklist)
+- Added phase-1 RGB chain net names to PCB net table for safe incremental rollout:
+  - RGB1_DOUT, RGB2_DOUT, RGB3_DOUT, RGB4_DOUT
+- Re-ran KiCad DRC after net-table update; clean (0 violations, 0 unconnected).
+
+- Added deterministic full-chain RGB template artifacts:
+  - tools/generate_rgb_chain_template.py
+  - RGB_ALL26_PLACEMENT.csv
+  - RGB_ALL26_CHAIN.csv
+- Added PCB net names for full RGB chain rollout: RGB5_DOUT through RGB26_DOUT.
+- Re-ran KiCad DRC after full net-table expansion; clean (0 violations, 0 unconnected).
+- Inserted phase-1 RGB mechanical placeholders for SW1-SW4 on PCB:
+  - References: RGB1, RGB2, RGB3, RGB4
+  - Placement uses RGB_PHASE1_PLACEMENT.csv coordinates.
+  - Pads intentionally left on net 0 for mechanical/orientation validation step.
+- Normalized placeholder footprint names to local ID (RGB_PLACEHOLDER_3535) to keep DRC clean.
+- Re-ran KiCad DRC after placement normalization; clean (0 violations, 0 unconnected).
+- Phase-1 RGB data chain (SW1-SW4) is now mapped and routed:
+  - RGB1 pad2 -> RGB2 pad4 on net RGB1_DOUT
+  - RGB2 pad2 -> RGB3 pad4 on net RGB2_DOUT
+  - RGB3 pad2 -> RGB4 pad4 on net RGB3_DOUT
+  - RGB4 pad2 assigned RGB4_DOUT (forward-chain placeholder)
+- Kept RGB power/GND pads and RGB1 DIN source tie-in deferred for next safe step.
+- Re-ran KiCad DRC after data-chain routing correction; clean (0 violations, 0 unconnected).
+- Placed RGB placeholders for all remaining keys (RGB5..RGB26) using RGB_ALL26_PLACEMENT.csv.
+- All 26 key positions now include an on-board RGB footprint placeholder (RGB1..RGB26).
+- Re-ran KiCad DRC after full placeholder placement; clean (0 violations, 0 unconnected).
+- Completed full 26-key RGB data-chain electrical mapping and routing reset pass:
+  - RGB1 DIN tied to LED_DIN.
+  - RGB1..RGB26 DOUT nets mapped as RGB1_DOUT..RGB26_DOUT.
+  - RGB(n) DOUT routed to RGB(n+1) DIN for n=1..25.
+- Corrected a transient over-application bug that briefly set wrong shared DOUT nets.
+- Final post-fix DRC is clean again (0 violations, 0 unconnected).
+- Finalized RGB power rails for all 26 placeholders:
+  - RGB1..RGB26 pad1 assigned to 5V.
+  - RGB1..RGB26 pad3 assigned to GND.
+  - Added full-chain 5V/GND routing pass.
+- Post-routing DRC status:
+  - 0 unconnected pads
+  - 0 footprint errors
+  - 4 warning-level copper_sliver entries on F.Cu (initial pass)
+- Rebuilt generated RGB routing geometry with simpler direct segment topology.
+- Final DRC is fully clean: 0 violations, 0 unconnected pads, 0 footprint errors.

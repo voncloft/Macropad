@@ -1,0 +1,109 @@
+Macropad Rev-B Integration Plan
+Date: 2026-03-01
+
+Scope
+- Integrate features:
+  - #1 Per-key RGB (addressable) for layer and power status.
+  - #3 Larger display and richer on-device UI pages.
+  - #4 Encoder action profiles by layer/app mode.
+  - #5 Hall-effect analog control input.
+- Preserve currently validated baseline:
+  - Clean DRC status in current PCB.
+  - Existing case generation flow and snap-fit behavior.
+
+Current Baseline Notes
+- PCB: /home/von/Desktop/Macropad Project/Macropad/Macropad.kicad_pcb
+- Schematic: /home/von/Desktop/Macropad Project/Macropad/Macropad.kicad_sch
+- Case generator: /home/von/Desktop/Macropad Project/case/generate_macropad_case.py
+- Reset switch SW402 was relocated to avoid stand obstruction and is currently DRC clean.
+
+Implementation Order
+1) Electrical budget and pin assignment lock.
+2) Schematic updates for RGB chain + Hall sensor + display module update.
+3) PCB placement/routing updates and clearances.
+4) Case cutout update for larger display.
+5) Firmware integration for RGB, UI pages, encoder profiles, hall input.
+6) Validation pass (DRC, mechanical fit, power/thermal sanity).
+
+1) Pin/Power Lock (must complete before routing)
+- RGB chain
+  - Use a single data bus with per-key daisy chain (DIN/DOUT).
+  - Add a dedicated data net from MCU GPIO to first RGB key LED.
+  - Add local decoupling near RGB power entry and first LED.
+  - Add bulk cap near RGB supply entry point.
+- Hall input
+  - Select ADC-capable MCU pin with no current conflicts.
+  - Add 3V3, GND, OUT net and optional RC smoothing footprint.
+- Display
+  - Keep I2C if practical (SDA/SCL existing nets appear available).
+  - Increase module footprint area while maintaining top mechanical constraints.
+- Power
+  - Ensure 5V rail margin for worst-case RGB draw.
+  - Define firmware current limit target to avoid brownout.
+
+2) Schematic Changes (target)
+- Add per-key RGB symbols/footprints (WS2812B-mini or SK6812-mini class).
+- Add chain nets:
+  - RGB_IN, RGB_DOUT_n, RGB_5V, RGB_GND.
+- Add hall sensor symbol/footprint and net labels:
+  - HALL_OUT -> selected ADC pin.
+- Replace/resize display module footprint zone for larger module.
+- Keep encoder existing wiring; only firmware mapping changes unless hardware conflict appears.
+
+3) PCB Changes (target)
+- Place RGB parts close to each switch position with consistent orientation for routing.
+- Keep signal direction consistent for easier chain debugging.
+- Add test pads for:
+  - RGB data in
+  - 5V
+  - GND
+  - Hall analog output
+- Respect keepouts around:
+  - Hotswap sockets
+  - Mounting holes H1..H4
+  - Battery pocket influence area for mechanical stack-up
+- Re-run DRC after each major routing step.
+
+4) Case/Mechanical Changes (target)
+- Increase display window/recess dimensions modestly:
+  - Must not conflict with top switch openings or seam geometry.
+- Keep existing:
+  - Snap-fit lip/groove
+  - Release gaps and pry slots
+  - Reset tunnel/recess alignment
+- Regenerate:
+  - bottom/top/side_by_side/assembled STL set.
+
+5) Firmware Integration (target)
+- RGB:
+  - Layer color map.
+  - Power status overlay logic.
+  - Brightness/current cap configuration.
+- Display UI:
+  - Page system (layer, power, profile, telemetry/custom page).
+  - Basic transitions/animations.
+- Encoder:
+  - Profile mapping by layer/app mode.
+  - Press + rotate behaviors.
+- Hall:
+  - ADC read, smoothing/filter.
+  - Action mapping (volume/scrub/zoom selectable).
+
+Validation Checklist
+- KiCad DRC: 0 violations, 0 unconnected.
+- Mechanical checks:
+  - Display opening alignment.
+  - RGB mechanical clearance.
+  - Reset tunnel accessible and not self-actuating on flat surface.
+- Power checks:
+  - No unstable reset when RGB enabled.
+  - USB/battery path remains within expected current behavior.
+
+Open Decisions Needed During Implementation
+- Exact larger display module choice (physical dimensions + protocol).
+- Exact RGB part family (WS2812B vs SK6812 variant and package).
+- Hall sensor part choice and preferred control behavior default.
+
+Status
+- Started: documentation + implementation scaffold complete.
+- Next active task: lock display and RGB part selections, then patch schematic.
