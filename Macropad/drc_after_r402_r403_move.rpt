@@ -1,0 +1,12 @@
+** Drc report for Macropad.kicad_pcb **
+** Created on 2026-03-01T06:53:35-0500 **
+
+** Found 1 DRC violations **
+[copper_sliver]: Copper sliver (B.Cu)
+    Local override; warning
+
+** Found 0 unconnected pads **
+
+** Found 0 Footprint errors **
+
+** End of Report **
