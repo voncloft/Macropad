@@ -4673,14 +4673,14 @@
   (footprint "GEN_PinHeader_1x3_P2.54"
     (layer "F.Cu")
     (uuid b4d8b694-85a4-4eee-9d4e-3a1c3aab145c)
-    (at 92.250 -23.000)
+    (at 98.250 -28.000)
     (property "Reference" "J201"
       (at 0 -3 0)
       (layer "F.SilkS")
       (uuid 368edb10-d538-4374-850c-015f345eeefb)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (property "Value" "IR_RX"
+    (property "Value" "TSOP4838_C124647"
       (at 0 3 0)
       (layer "F.Fab")
       (uuid 16779c64-47b5-4611-9780-e010174f7849)
@@ -4711,7 +4711,7 @@
       (net 15 "IR_RX")
       (uuid c771d7a5-bcb2-45f1-bcd8-11ff787ec5a8)
     )
-    (model "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step"
+    (model "${KICAD9_3DMODEL_DIR}/OptoDevice.3dshapes/Vishay_MINICAST-3Pin.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -4721,14 +4721,14 @@
   (footprint "GEN_PinHeader_1x3_P2.54"
     (layer "F.Cu")
     (uuid 0fd4e771-00ac-43cd-af4c-cfa2bf5ef851)
-    (at 92.250 -13.000)
+    (at 92.250 -28.000)
     (property "Reference" "J202"
       (at 0 -3 0)
       (layer "F.SilkS")
       (uuid eef1f08b-679e-4a1e-8de9-824ccc3e6c43)
       (effects (font (size 1 1) (thickness 0.15)))
     )
-    (property "Value" "IR_TX"
+    (property "Value" "IR333-A_C264290"
       (at 0 3 0)
       (layer "F.Fab")
       (uuid 43300a7a-5284-4b19-8406-3e3dadb694ea)
@@ -4759,7 +4759,7 @@
       (net 14 "IR_TX")
       (uuid ef500eeb-a916-4cb2-a372-fd397bae5b6e)
     )
-    (model "${KICAD9_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step"
+    (model "${KICAD9_3DMODEL_DIR}/LED_THT.3dshapes/LED_D3.0mm.step"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -4817,7 +4817,7 @@
   (footprint "GEN_PinHeader_1x4_P2.54"
     (layer "F.Cu")
     (uuid a1bb417e-9dd1-415b-a7cf-9ab1c9cafafc)
-    (at 92.250 7.000)
+    (at 95.000 -18.000)
     (property "Reference" "J302"
       (at 0 -3 0)
       (layer "F.SilkS")
@@ -5025,7 +5025,7 @@
   (footprint "USB_C_Receptacle_GCT_USB4125_6P_LOCAL"
     (layer "F.Cu")
     (uuid a0b18af4-c381-4301-9d8a-721cd2f13099)
-    (at 12.000 35.000)
+    (at 51.125 -36.000)
     (property "Reference" "J402"
       (at 0 5.6 0)
       (layer "F.SilkS")
@@ -5544,7 +5544,7 @@
   (footprint "GEN_RotaryEncoder_EC11_Switch"
     (layer "F.Cu")
     (uuid ee46381c-f8cf-4eab-ac2e-95d08d4cb5ff)
-    (at 78.250 15.000)
+    (at 8.000 -10.000)
     (property "Reference" "SW401"
       (at 0 -8 0)
       (layer "F.SilkS")
@@ -5629,6 +5629,11 @@
       (layers "*.Cu" "*.Mask")
       (uuid 6f6b0589-e19a-45d7-a0fe-ebad6a14f098)
     )
+    (model "${KICAD9_3DMODEL_DIR}/MountingHole.3dshapes/MountingHole_3.2mm_M3.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
   (footprint "GEN_MountingHole_3.2mm_M3"
     (layer "F.Cu")
@@ -5653,6 +5658,11 @@
       (drill 3.2)
       (layers "*.Cu" "*.Mask")
       (uuid 8dbd5de1-db8e-4be9-a4df-99add89a9f93)
+    )
+    (model "${KICAD9_3DMODEL_DIR}/MountingHole.3dshapes/MountingHole_3.2mm_M3.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
     )
   )
   (footprint "GEN_MountingHole_3.2mm_M3"
@@ -5679,6 +5689,11 @@
       (layers "*.Cu" "*.Mask")
       (uuid 63d0a2d9-773e-46b0-9094-b8c295f91b8b)
     )
+    (model "${KICAD9_3DMODEL_DIR}/MountingHole.3dshapes/MountingHole_3.2mm_M3.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
   (footprint "GEN_MountingHole_3.2mm_M3"
     (layer "F.Cu")
@@ -5703,6 +5718,11 @@
       (drill 3.2)
       (layers "*.Cu" "*.Mask")
       (uuid f8557f4d-2f77-416e-a414-860ca15789c8)
+    )
+    (model "${KICAD9_3DMODEL_DIR}/MountingHole.3dshapes/MountingHole_3.2mm_M3.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
     )
   )
   (segment
@@ -6842,16 +6862,8 @@
     (uuid f040f48b-b8f9-471d-b6c9-a9e9a7228efc)
   )
   (segment
-    (start 80.250 -19.190)
-    (end 92.250 -25.540)
-    (width 0.300)
-    (layer "F.Cu")
-    (net 15)
-    (uuid b0ddf5e4-b7f8-40fb-88a6-932de73d6f3c)
-  )
-  (segment
     (start 80.250 -21.730)
-    (end 92.250 -15.540)
+    (end 92.250 -30.540)
     (width 0.300)
     (layer "F.Cu")
     (net 14)
@@ -7022,7 +7034,6 @@
   (segment (start 77.155 -10.500) (end 77.155 -12.000) (width 0.250) (layer "F.Cu") (net 11))
   (via (at 77.155 -12.000) (size 0.800) (drill 0.400) (layers "F.Cu" "B.Cu") (net 11))
   (segment (start 77.155 -12.000) (end 86.250 -14.110) (width 0.250) (layer "B.Cu") (net 11))
-  (segment (start 84.000 -13.020) (end 80.250 -19.190) (width 0.250) (layer "F.Cu") (net 15))
   (segment (start 84.000 -14.290) (end 80.250 -21.730) (width 0.250) (layer "F.Cu") (net 14))
   (segment (start 84.000 -15.560) (end 80.250 -24.270) (width 0.250) (layer "F.Cu") (net 18))
   (segment (start 84.000 -16.830) (end 80.250 -26.810) (width 0.250) (layer "F.Cu") (net 19))
@@ -7040,7 +7051,6 @@
   (segment (start 27.850 14.000) (end 34.150 14.000) (width 0.400) (layer "F.Cu") (net 21))
   (segment (start 27.850 14.000) (end 22.250 14.190) (width 0.400) (layer "F.Cu") (net 21))
   (segment (start 27.850 11.700) (end 22.250 10.540) (width 0.400) (layer "F.Cu") (net 23))
-  (segment (start 10.480 31.920) (end 13.520 31.920) (width 0.300) (layer "F.Cu") (net 22))
   (segment (start 13.520 31.920) (end 37.1375 28.950) (width 0.300) (layer "F.Cu") (net 22))
   (segment (start 37.1375 28.950) (end 22.250 16.730) (width 0.300) (layer "F.Cu") (net 22))
   (segment (start 37.1375 28.950) (end 32.675 25.000) (width 0.300) (layer "F.Cu") (net 22))
@@ -7049,9 +7059,6 @@
   (segment (start 9.250 31.920) (end 14.750 31.920) (width 0.300) (layer "F.Cu") (net 23))
   (segment (start 14.750 31.920) (end 22.250 19.270) (width 0.300) (layer "F.Cu") (net 23))
   (segment (start 7.680 32.000) (end 9.250 31.920) (width 0.300) (layer "F.Cu") (net 23))
-  (segment (start 16.320 32.000) (end 14.750 31.920) (width 0.300) (layer "F.Cu") (net 23))
-  (segment (start 7.680 35.800) (end 7.680 32.000) (width 0.300) (layer "F.Cu") (net 23))
-  (segment (start 16.320 35.800) (end 16.320 32.000) (width 0.300) (layer "F.Cu") (net 23))
   (segment (start 11.500 27.175) (end 9.250 31.920) (width 0.250) (layer "F.Cu") (net 23))
   (segment (start 12.500 27.175) (end 14.750 31.920) (width 0.250) (layer "F.Cu") (net 23))
   (segment (start 34.8625 28.950) (end 29.675 25.000) (width 0.300) (layer "F.Cu") (net 50))
@@ -7077,4 +7084,30 @@
   (segment (start 38.825 18.000) (end 34.325 25.000) (width 0.300) (layer "F.Cu") (net 23))
   (segment (start 37.8625 14.950) (end 42.825 18.000) (width 0.250) (layer "F.Cu") (net 55))
   (segment (start 42.825 18.000) (end 41.175 20.000) (width 0.250) (layer "F.Cu") (net 55))
+  (segment (start 84.000 -13.020) (end 98.250 -30.540) (width 0.250) (layer "F.Cu") (net 15))
+  (segment (start 70.250 -11.570) (end 98.250 -25.460) (width 0.250) (layer "B.Cu") (net 21))
+  (segment (start 52.645 -39.080) (end 49.605 -39.080) (width 0.500) (layer "F.Cu") (net 22))
+  (segment (start 52.645 -39.080) (end 92.250 -25.460) (width 0.300) (layer "F.Cu") (net 22))
+  (segment (start 92.250 -25.460) (end 80.250 -11.570) (width 0.300) (layer "F.Cu") (net 22))
+  (segment (start 98.250 -28.000) (end 92.250 -28.000) (width 0.300) (layer "F.Cu") (net 23))
+  (segment (start 98.250 -28.000) (end 80.250 -9.030) (width 0.300) (layer "F.Cu") (net 23))
+  (segment (start 66.500 -28.260) (end 55.445 -35.200) (width 0.300) (layer "F.Cu") (net 23))
+  (segment (start 55.445 -35.200) (end 55.445 -39.000) (width 0.500) (layer "F.Cu") (net 23))
+  (segment (start 55.445 -39.000) (end 53.875 -39.080) (width 0.500) (layer "F.Cu") (net 23))
+  (segment (start 53.875 -39.080) (end 48.375 -39.080) (width 0.500) (layer "F.Cu") (net 23))
+  (segment (start 48.375 -39.080) (end 46.805 -39.000) (width 0.500) (layer "F.Cu") (net 23))
+  (segment (start 46.805 -39.000) (end 46.805 -35.200) (width 0.500) (layer "F.Cu") (net 23))
+  (segment (start 50.625 -39.080) (end 50.625 -37.580) (width 0.250) (layer "F.Cu") (net 51))
+  (via (at 50.625 -37.580) (size 0.800) (drill 0.400) (layers "F.Cu" "B.Cu") (net 51))
+  (segment (start 50.625 -37.580) (end 4.000 -37.580) (width 0.250) (layer "B.Cu") (net 51))
+  (segment (start 4.000 -37.580) (end 4.000 31.920) (width 0.250) (layer "B.Cu") (net 51))
+  (segment (start 4.000 31.920) (end 18.000 31.920) (width 0.250) (layer "B.Cu") (net 51))
+  (via (at 18.000 31.920) (size 0.800) (drill 0.400) (layers "F.Cu" "B.Cu") (net 51))
+  (segment (start 18.000 31.920) (end 11.500 31.920) (width 0.250) (layer "F.Cu") (net 51))
+  (segment (start 51.625 -39.080) (end 51.625 -36.580) (width 0.250) (layer "F.Cu") (net 52))
+  (via (at 51.625 -36.580) (size 0.800) (drill 0.400) (layers "F.Cu" "B.Cu") (net 52))
+  (segment (start 51.625 -36.580) (end 6.000 -36.580) (width 0.250) (layer "B.Cu") (net 52))
+  (segment (start 6.000 -36.580) (end 6.000 31.920) (width 0.250) (layer "B.Cu") (net 52))
+  (segment (start 6.000 31.920) (end 12.500 31.920) (width 0.250) (layer "B.Cu") (net 52))
+  (via (at 12.500 31.920) (size 0.800) (drill 0.400) (layers "F.Cu" "B.Cu") (net 52))
 )

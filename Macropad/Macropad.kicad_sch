@@ -2443,29 +2443,29 @@
   )
   (symbol
     (lib_id "Connector_Generic:Conn_01x03")
-    (at 290.00 134.00 0)
+    (at 290.00 104.00 0)
     (unit 1)
     (in_bom yes)
     (on_board yes)
     (uuid 28db7b65-376c-483b-bad5-fb1c092ce532)
     (property "Reference" "J201"
-      (at 290.00 139.00 0)
+      (at 290.00 109.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     )
-    (property "Value" "IR_RX"
-      (at 290.00 129.00 0)
+    (property "Value" "TSOP4838_C124647"
+      (at 290.00 99.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     )
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
-      (at 290.00 134.00 0)
+      (at 290.00 104.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
     )
     (property "Datasheet" "~"
-      (at 290.00 134.00 0)
+      (at 290.00 104.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
     )
-    (property "Description" "IR receiver header"
-      (at 290.00 134.00 0)
+    (property "Description" "JLC in-stock IR receiver (TSOP4838, C124647) on SIP-3 footprint"
+      (at 290.00 104.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
     )
     (pin "1" (uuid 20a8f639-b330-427a-b896-80782826aa7b))
@@ -2474,29 +2474,29 @@
   )
   (symbol
     (lib_id "Connector_Generic:Conn_01x03")
-    (at 290.00 154.00 0)
+    (at 290.00 116.00 0)
     (unit 1)
     (in_bom yes)
     (on_board yes)
     (uuid acbcb9e5-54ca-403f-af24-2c20118682d5)
     (property "Reference" "J202"
-      (at 290.00 159.00 0)
+      (at 290.00 121.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     )
-    (property "Value" "IR_TX"
-      (at 290.00 149.00 0)
+    (property "Value" "IR333-A_C264290"
+      (at 290.00 111.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     )
     (property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical"
-      (at 290.00 154.00 0)
+      (at 290.00 116.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
     )
     (property "Datasheet" "~"
-      (at 290.00 154.00 0)
+      (at 290.00 116.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
     )
-    (property "Description" "IR transmitter header"
-      (at 290.00 154.00 0)
+    (property "Description" "JLC in-stock IR LED TX (IR333-A, C264290); use driver stage for higher range"
+      (at 290.00 116.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
     )
     (pin "1" (uuid b30514ef-a90c-455a-aa48-7a621852ad3c))
