@@ -1,5 +1,5 @@
 Drill report for Macropad.kicad_pcb
-Created on 2026-02-28T22:53:38-0500
+Created on 2026-03-01T02:19:49-0500
 
 Copper Layer Stackup:
     =============================================================
@@ -10,13 +10,13 @@ Copper Layer Stackup:
 Drill file 'Macropad-PTH.drl' contains
     plated through holes:
     =============================================================
-    T1  0.400mm  0.0157"  (10 holes)
+    T1  0.400mm  0.0157"  (16 holes)
     T2  0.600mm  0.0236"  (4 holes)  (with 4 slots)
     T3  0.800mm  0.0315"  (54 holes)
     T4  1.000mm  0.0394"  (24 holes)
     T5  3.000mm  0.1181"  (52 holes)
 
-    Total plated holes count 144
+    Total plated holes count 150
 
 
 Drill file 'Macropad-NPTH.drl' contains
