@@ -2483,7 +2483,7 @@
       (at 290.00 121.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     )
-    (property "Value" "IR333-A_C264290"
+    (property "Value" "IR_LED_TX_HDR"
       (at 290.00 111.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     )
@@ -2495,7 +2495,7 @@
       (at 290.00 116.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
     )
-    (property "Description" "JLC in-stock IR LED TX (IR333-A, C264290); use driver stage for higher range"
+    (property "Description" "IR TX header for bare LED with on-board series current limiting"
       (at 290.00 116.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
     )
@@ -2659,6 +2659,36 @@
     )
     (pin "1" (uuid 6c093d66-8c34-431a-a605-de15491218f9))
     (pin "2" (uuid 1e20154f-eef0-4f8c-87a3-aac333411e20))
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 292.00 146.00 0)
+    (unit 1)
+    (in_bom yes)
+    (on_board yes)
+    (uuid c1c331ff-3c3a-4f60-88c7-c036e28a1302)
+    (property "Reference" "R408"
+      (at 292.00 149.00 0)
+      (effects (font (size 1.27 1.27) (thickness 0.15)))
+    )
+    (property "Value" "220R"
+      (at 292.00 143.00 0)
+      (effects (font (size 1.27 1.27) (thickness 0.15)))
+    )
+    (property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+      (at 292.00 146.00 0)
+      (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
+    )
+    (property "Datasheet" "~"
+      (at 292.00 146.00 0)
+      (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
+    )
+    (property "Description" "Series current limit for IR TX LED header"
+      (at 292.00 146.00 0)
+      (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
+    )
+    (pin "1" (uuid 4d7c26d8-9c5f-4e9d-8262-a965827f6df2))
+    (pin "2" (uuid 2e9e15d4-a0f5-4f8f-836f-524a6f663f86))
   )
   (symbol
     (lib_id "Device:CP")
@@ -3064,12 +3094,36 @@
     (stroke (width 0) (type default))
     (uuid d74ca6f4-d533-4e38-98a8-d4c2068d5ec1)
   )
-  (global_label "IR_TX"
+  (global_label "IR_TX_LED"
     (shape input)
     (at 280.92 150.19 180)
     (fields_autoplaced)
     (effects (font (size 1.27 1.27) (thickness 0.15)))
     (uuid 4834ed9a-50b4-4baf-ae09-c5a882831495)
+  )
+  (wire
+    (pts (xy 289.46 146.00) (xy 286.92 146.00))
+    (stroke (width 0) (type default))
+    (uuid 9d50d79f-86a1-4312-b15d-aaf08f7ee7bf)
+  )
+  (global_label "IR_TX"
+    (shape input)
+    (at 286.92 146.00 180)
+    (fields_autoplaced)
+    (effects (font (size 1.27 1.27) (thickness 0.15)))
+    (uuid b7896cd5-f190-4cad-ac93-b97ff11dd329)
+  )
+  (wire
+    (pts (xy 294.54 146.00) (xy 299.08 146.00))
+    (stroke (width 0) (type default))
+    (uuid ac8f68c6-c0dc-422a-8629-f9653eced1bc)
+  )
+  (global_label "IR_TX_LED"
+    (shape input)
+    (at 299.08 146.00 0)
+    (fields_autoplaced)
+    (effects (font (size 1.27 1.27) (thickness 0.15)))
+    (uuid 23e50ec5-2fc2-434b-8516-f7dd6d362255)
   )
   (wire
     (pts (xy 326.92 156.54) (xy 322.92 156.54))
@@ -3824,12 +3878,18 @@
 			(value "IR_RX")
 			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical")
 		)
-		(path "/acbcb9e5-54ca-403f-af24-2c20118682d5"
-			(reference "J202")
-			(unit 1)
-			(value "IR_TX")
-			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical")
-		)
+			(path "/acbcb9e5-54ca-403f-af24-2c20118682d5"
+				(reference "J202")
+				(unit 1)
+				(value "IR_LED_TX_HDR")
+				(footprint "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical")
+			)
+			(path "/c1c331ff-3c3a-4f60-88c7-c036e28a1302"
+				(reference "R408")
+				(unit 1)
+				(value "220R")
+				(footprint "Resistor_SMD:R_0603_1608Metric")
+			)
 		(path "/404ff6c7-148c-438c-a9f2-f16d9f51ed43"
 			(reference "J301")
 			(unit 1)

@@ -1,0 +1,46 @@
+Rev-C IR TX Driver Spec (Long-Range)
+Date: 2026-03-02
+
+Goal
+- Drive a bare IR LED from 5V at higher pulse current (target 50-100 mA).
+- Keep MCU GPIO isolated from LED current path.
+
+Recommended topology (default)
+- Low-side N-MOSFET switch.
+- Q501: AO3400A (or equivalent logic-level N-MOSFET, SOT-23).
+- R501 (gate series): 100R.
+- R502 (gate pulldown): 100k to GND.
+- R503 (LED current limit): 47R, 1/4W.
+- D501: IR LED (940nm typical).
+
+Electrical path
+- +5V -> R503 -> D501 anode
+- D501 cathode -> Q501 drain
+- Q501 source -> GND
+- IR_TX (from ESP32-S3 GPIO) -> R501 -> Q501 gate
+- Q501 gate -> R502 -> GND
+
+Current expectation (approximate)
+- With 5V rail, IR LED Vf ~1.3V, MOSFET drop small:
+- R503 = 47R gives roughly 70-80 mA pulse current.
+- If you want closer to 100 mA, use 39R (check thermal/peak limits).
+- If you want closer to 50-60 mA, use 56R.
+
+Header pinout for external LED wiring (J202, 1x3)
+1) +5V
+2) IR_LED_K (switched cathode node, from Q501 drain)
+3) GND
+
+Firmware notes
+- Keep carrier around 38 kHz.
+- Duty in burst should stay moderate (typical IR remote framing).
+- Do not drive continuous DC ON at high current.
+
+Layout notes
+- Place Q501 + R503 close to J202.
+- Keep the high-current loop short: +5V -> R503 -> LED -> Q501 -> GND.
+- Use a solid local GND return near Q501 source.
+
+Fallback option (if MOSFET unavailable)
+- NPN low-side stage is possible (2N2222/S8050 + base resistor), but MOSFET is preferred:
+- Better margin at 3.3V drive and lower loss at 50-100 mA pulses.
