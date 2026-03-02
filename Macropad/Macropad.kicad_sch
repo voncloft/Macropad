@@ -2609,7 +2609,7 @@
       (at 332.00 183.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     )
-    (property "Value" "TOUCH_SD_CTRL"
+    (property "Value" "TOUCH_I2C_SD"
       (at 332.00 173.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)))
     )
@@ -2621,7 +2621,7 @@
       (at 332.00 178.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
     )
-    (property "Description" "Touch + SD shared-SPI control header (CS/MISO/IRQ/SD_CS)"
+    (property "Description" "Touch I2C + SD SPI header (TOUCH_SDA/SPI_MISO/TOUCH_SCL/SD_CS)"
       (at 332.00 178.00 0)
       (effects (font (size 1.27 1.27) (thickness 0.15)) (hide yes))
     )
@@ -3172,7 +3172,7 @@
     (stroke (width 0) (type default))
     (uuid d6de3b99-8910-4004-a0ee-749668b14c1d)
   )
-  (global_label "TOUCH_CS"
+  (global_label "TOUCH_SDA"
     (shape input)
     (at 322.92 180.54 180)
     (fields_autoplaced)
@@ -3184,7 +3184,7 @@
     (stroke (width 0) (type default))
     (uuid ef5779c8-6a7e-486a-bbd3-43257bcf3ca6)
   )
-  (global_label "TOUCH_MISO"
+  (global_label "SPI_MISO"
     (shape input)
     (at 322.92 178.00 180)
     (fields_autoplaced)
@@ -3196,7 +3196,7 @@
     (stroke (width 0) (type default))
     (uuid 9a34bedc-4b55-427e-85c7-b4bd7ae332ab)
   )
-  (global_label "TOUCH_IRQ"
+  (global_label "TOUCH_SCL"
     (shape input)
     (at 322.92 175.46 180)
     (fields_autoplaced)
@@ -3851,7 +3851,7 @@
 		(path "/aabc9772-6793-4e06-a3fe-930a60627d16"
 			(reference "J304")
 			(unit 1)
-			(value "TOUCH_SD_CTRL")
+			(value "TOUCH_I2C_SD")
 			(footprint "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical")
 		)
 		(path "/148cdbe0-aa5c-49be-9664-77f6b6e912be"

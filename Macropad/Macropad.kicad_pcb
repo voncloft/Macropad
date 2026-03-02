@@ -170,9 +170,9 @@
 	(net 85 "LCD_DC")
 	(net 86 "LCD_RST")
 	(net 87 "LCD_BL")
-	(net 88 "TOUCH_CS")
-	(net 89 "TOUCH_MISO")
-	(net 90 "TOUCH_IRQ")
+	(net 88 "TOUCH_SDA")
+	(net 89 "SPI_MISO")
+	(net 90 "TOUCH_SCL")
 	(net 91 "SD_CS")
 	(footprint "RGB_PLACEHOLDER_3535"
 		(layer "F.Cu")
@@ -6463,7 +6463,7 @@
 				)
 			)
 		)
-		(property "Value" "TOUCH_SD_CTRL"
+		(property "Value" "TOUCH_I2C_SD"
 			(at 0 3 0)
 			(layer "F.Fab")
 			(uuid "94294850-f2e2-4411-82a9-73a0d6d63418")
@@ -6506,7 +6506,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 88 "TOUCH_CS")
+			(net 88 "TOUCH_SDA")
 			(uuid "def7ce88-af41-4955-a4c0-1e2f3b953029")
 		)
 		(pad "2" thru_hole circle
@@ -6515,7 +6515,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 89 "TOUCH_MISO")
+			(net 89 "SPI_MISO")
 			(uuid "2e5f6af8-34a2-44bf-be7f-b2eaa92de41f")
 		)
 		(pad "3" thru_hole circle
@@ -6524,7 +6524,7 @@
 			(drill 1)
 			(layers "*.Cu" "*.Mask")
 			(remove_unused_layers no)
-			(net 90 "TOUCH_IRQ")
+			(net 90 "TOUCH_SCL")
 			(uuid "054188ea-10e2-476a-b419-bea311bdfb91")
 		)
 		(pad "4" thru_hole circle
@@ -9038,21 +9038,21 @@
 			(at 4.445 12.5)
 			(size 1.5 0.9)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net 88 "TOUCH_CS")
+			(net 88 "TOUCH_SDA")
 			(uuid "aa047402-7617-4d31-9827-e415832debb0")
 		)
 		(pad "25" smd rect
 			(at 5.715 12.5)
 			(size 1.5 0.9)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net 89 "TOUCH_MISO")
+			(net 89 "SPI_MISO")
 			(uuid "59e99b8b-f6bd-49e4-a1ff-ff06d85007bb")
 		)
 		(pad "26" smd rect
 			(at 6.985 12.5)
 			(size 1.5 0.9)
 			(layers "F.Cu" "F.Mask" "F.Paste")
-			(net 90 "TOUCH_IRQ")
+			(net 90 "TOUCH_SCL")
 			(uuid "4d4589a7-ab4c-4d64-a12f-eff85e0aa320")
 		)
 		(pad "27" smd rect
