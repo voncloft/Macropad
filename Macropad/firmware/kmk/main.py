@@ -15,6 +15,18 @@ keyboard = KMKKeyboard()
 layers = Layers()
 keyboard.modules.append(layers)
 
+# Shared SPI touch setup (XPT2046-style):
+# - T_CLK shares LCD_SCLK
+# - T_DIN shares LCD_MOSI
+# - T_DO uses TOUCH_MISO (U901 pad 25)
+# - T_CS uses TOUCH_CS (U901 pad 24)
+# - T_IRQ uses U901 pad 26 (optional in firmware logic)
+# - SD_CS uses U901 pad 27 for optional SD card on shared SPI
+TOUCH_CS_PAD = 24
+TOUCH_MISO_PAD = 25
+TOUCH_IRQ_PAD = 26
+SD_CS_PAD = 27
+
 # Placeholder extension setup (replace with your board pin mapping).
 rgb = RGB(
     pixel_pin=None,          # TODO: map to RGB_DATA GPIO

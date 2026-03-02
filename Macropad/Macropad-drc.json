@@ -1,0 +1,40 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-03-01T16:57:16-0500",
+    "kicad_version": "9.0.7",
+    "schematic_parity": [],
+    "source": "Macropad.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Silkscreen clipped by board edge",
+            "items": [
+                {
+                    "description": "Rectangle on Edge.Cuts",
+                    "pos": {
+                        "x": -5.0,
+                        "y": -41.0
+                    },
+                    "uuid": "f13ba255-5096-412d-99ff-c87493994093"
+                },
+                {
+                    "description": "Reference field of J304",
+                    "pos": {
+                        "x": 107.0,
+                        "y": -21.0
+                    },
+                    "uuid": "9aef456d-9424-4178-aed3-3a8e948c3e32"
+                }
+            ],
+            "severity": "warning",
+            "type": "silk_edge_clearance"
+        },
+        {
+            "description": "Copper sliver (F.Cu)",
+            "items": [],
+            "severity": "warning",
+            "type": "copper_sliver"
+        }
+    ]
+}

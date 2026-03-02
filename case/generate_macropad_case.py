@@ -34,6 +34,8 @@ TOP_THICKNESS = 2.2
 BOTTOM_THICKNESS = 2.4
 PCB_CLEARANCE_XY = 1.0
 CASE_HEIGHT = 26.0
+# Add extra height only on the top side of the case profile.
+CASE_EXTRA_Y_TOP = 12.7  # 0.5 in
 
 # 4 degree typing/elevation angle requested.
 TILT_DEG = 4.0
@@ -42,8 +44,10 @@ TILT_DEG = 4.0
 SWITCH_HOLE_SIZE = (14.1, 14.1)
 
 # OLED/LCD flush mount zone at top.
-# View window: what you actually see.
-OLED_WINDOW_SIZE = (66.0, 50.0)
+# View window: what you actually see (relative to OLED center anchor).
+# Current placement keeps bottom-left fixed and sets visible size to 69.6 x 45.2.
+OLED_WINDOW_BOTTOM_LEFT_OFFSET = (-68.0, -5.0)
+OLED_WINDOW_TOP_RIGHT_OFFSET = (1.6, 40.2)
 # Module face size tuned for a large rectangular display module (2.0in-class TFT/OLED board envelope).
 LCD_MODULE_FACE_SIZE = (72.0, 56.0)
 LCD_MODULE_FACE_CLEARANCE = 0.25
@@ -62,6 +66,14 @@ OLED_OFFSET_FROM_ANCHOR = (-39.10, 13.6)
 LCD_BACK_PORT_ESCAPE_SIZE = (34.0, 12.0)  # (x span, y span)
 LCD_BACK_PORT_ESCAPE_Y_OFFSET = -27.0     # toward top edge of case
 LCD_BACK_PORT_ESCAPE_DEPTH = 5.5
+# LCD module mounting-hole pattern (underside of top shell).
+LCD_MOUNT_HOLE_SPACING = (76.2, 57.2)  # center-to-center (x, y)
+LCD_MOUNT_STUD_DIAMETER = 2.4
+LCD_MOUNT_STUD_HEIGHT = 3.4
+LCD_MOUNT_STUD_TIP_DIAMETER = 1.9
+LCD_MOUNT_STUD_TIP_HEIGHT = 0.9
+LCD_MOUNT_RETENTION_CAP_DIAMETER = 3.10
+LCD_MOUNT_RETENTION_CAP_HEIGHT = 1.00
 
 # Rotary encoder top circle opening (missing previously).
 ROTARY_HOLE_ANCHOR_REF = "SW401"
@@ -109,7 +121,7 @@ BOTTOM_STAND_X_SHIFT = 0.0
 
 # LiPo battery cradle for a 3.7V ~2500mAh pack.
 BATTERY_ANCHOR_REF = "J400"
-BATTERY_OFFSET_FROM_ANCHOR = (28.0, 52.0)  # (x, y) from J400
+BATTERY_OFFSET_FROM_ANCHOR = (39.125, 94.0)  # centered in X and moved down ~30 mm in layout view
 BATTERY_POCKET_SIZE = (72.0, 52.0, 6.8)  # (x, y, z clearance)
 BATTERY_POD_WALL = 1.8
 BATTERY_FLOOR_THICKNESS = 1.6
@@ -276,7 +288,7 @@ def main() -> None:
     board_h = max_y - min_y
 
     outer_x = board_w + 2.0 * (WALL + PCB_CLEARANCE_XY)
-    outer_y = board_h + 2.0 * (WALL + PCB_CLEARANCE_XY)
+    outer_y = board_h + 2.0 * (WALL + PCB_CLEARANCE_XY) + CASE_EXTRA_Y_TOP
     outer_z = CASE_HEIGHT
 
     def pcb_to_case(x: float, y: float) -> Tuple[float, float]:
@@ -368,35 +380,86 @@ def main() -> None:
         oled_anchor.y + OLED_OFFSET_FROM_ANCHOR[1],
     )
     ox = outer_x - ox_raw if MIRROR_TOP_FEATURES_X else ox_raw
-    ow, oh = OLED_WINDOW_SIZE
+    wblx, wbly = OLED_WINDOW_BOTTOM_LEFT_OFFSET
+    wtrx, wtry = OLED_WINDOW_TOP_RIGHT_OFFSET
     mw, mh = LCD_MODULE_FACE_SIZE
     pocket_w = mw + 2.0 * LCD_MODULE_FACE_CLEARANCE
     pocket_h = mh + 2.0 * LCD_MODULE_FACE_CLEARANCE
+    # Keep pocket centered to the visible window so bezel thickness is uniform.
+    window_left = ox + wblx
+    window_bottom = oy + wbly
+    window_right = ox + wtrx
+    window_top = oy + wtry
+    pocket_cx = (window_left + window_right) / 2.0
+    pocket_cy = (window_bottom + window_top) / 2.0
+    pocket_left = pocket_cx - pocket_w / 2.0
+    pocket_bottom = pocket_cy - pocket_h / 2.0
+    pocket_right = pocket_cx + pocket_w / 2.0
+    pocket_top = pocket_cy + pocket_h / 2.0
 
     # Top recess so module face can sit flush with the case top.
     cutters.append(
         box_mesh(
-            (ox - pocket_w / 2.0, oy - pocket_h / 2.0, outer_z - LCD_FLUSH_DEPTH - 0.2),
-            (ox + pocket_w / 2.0, oy + pocket_h / 2.0, outer_z + 1.0),
+            (pocket_left, pocket_bottom, outer_z - LCD_FLUSH_DEPTH - 0.2),
+            (pocket_right, pocket_top, outer_z + 1.0),
         )
     )
 
     # Visible screen opening through the remaining roof thickness.
     cutters.append(
         box_mesh(
-            (ox - ow / 2.0, oy - oh / 2.0, outer_z - TOP_THICKNESS - 1.0),
-            (ox + ow / 2.0, oy + oh / 2.0, outer_z + 1.5),
+            (window_left, window_bottom, outer_z - TOP_THICKNESS - 1.0),
+            (window_right, window_top, outer_z + 1.5),
         )
     )
     # Minimal underside relief behind LCD rear port for solder/wire escape.
     exw, exh = LCD_BACK_PORT_ESCAPE_SIZE
-    ecy = oy + LCD_BACK_PORT_ESCAPE_Y_OFFSET
+    ecy = pocket_cy + LCD_BACK_PORT_ESCAPE_Y_OFFSET
     cutters.append(
         box_mesh(
-            (ox - exw / 2.0, ecy - exh / 2.0, outer_z - LCD_FLUSH_DEPTH - LCD_BACK_PORT_ESCAPE_DEPTH),
-            (ox + exw / 2.0, ecy + exh / 2.0, outer_z - LCD_FLUSH_DEPTH + 0.2),
+            (pocket_cx - exw / 2.0, ecy - exh / 2.0, outer_z - LCD_FLUSH_DEPTH - LCD_BACK_PORT_ESCAPE_DEPTH),
+            (pocket_cx + exw / 2.0, ecy + exh / 2.0, outer_z - LCD_FLUSH_DEPTH + 0.2),
         )
     )
+    # Underside studs for LCD mounting points (no through-holes in top shell).
+    hdx, hdy = LCD_MOUNT_HOLE_SPACING
+    stud_tip_h = min(LCD_MOUNT_STUD_TIP_HEIGHT, max(0.0, LCD_MOUNT_STUD_HEIGHT - 0.6))
+    stud_stem_h = LCD_MOUNT_STUD_HEIGHT - stud_tip_h
+    stud_top_z = outer_z - LCD_FLUSH_DEPTH - 0.25
+    stud_bottom_z = stud_top_z - LCD_MOUNT_STUD_HEIGHT
+    for sx in (-1.0, 1.0):
+        for sy in (-1.0, 1.0):
+            hx = pocket_cx + sx * (hdx / 2.0)
+            hy = pocket_cy + sy * (hdy / 2.0)
+            if stud_stem_h > 0.0:
+                additions.append(
+                    cylinder_z(
+                        center_xyz=(hx, hy, stud_bottom_z + stud_stem_h / 2.0),
+                        radius=LCD_MOUNT_STUD_DIAMETER / 2.0,
+                        length=stud_stem_h,
+                    )
+                )
+            if stud_tip_h > 0.0:
+                additions.append(
+                    cylinder_z(
+                        center_xyz=(hx, hy, stud_bottom_z + stud_stem_h + stud_tip_h / 2.0),
+                        radius=LCD_MOUNT_STUD_TIP_DIAMETER / 2.0,
+                        length=stud_tip_h,
+                    )
+                )
+            # Small mushroom cap for positive retention through ~3.2 mm mounting holes.
+            if LCD_MOUNT_RETENTION_CAP_HEIGHT > 0.0:
+                additions.append(
+                    cylinder_z(
+                        center_xyz=(
+                            hx,
+                            hy,
+                            stud_bottom_z + stud_stem_h + stud_tip_h + LCD_MOUNT_RETENTION_CAP_HEIGHT / 2.0,
+                        ),
+                        radius=LCD_MOUNT_RETENTION_CAP_DIAMETER / 2.0,
+                        length=LCD_MOUNT_RETENTION_CAP_HEIGHT,
+                    )
+                )
 
     # Rotary encoder circle opening.
     enc_anchor = fps[ROTARY_HOLE_ANCHOR_REF]
