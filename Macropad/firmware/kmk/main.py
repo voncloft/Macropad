@@ -16,6 +16,12 @@ from kmk.extensions.oled import Oled, OledData
 from kmk.scanners import DiodeOrientation
 
 try:
+    from kmk.modules import Module
+except Exception:
+    class Module:  # type: ignore[override]
+        pass
+
+try:
     import board  # type: ignore
 except Exception:
     board = None
@@ -143,14 +149,8 @@ rgb = RGB(
 )
 keyboard.extensions.append(rgb)
 
-oled = Oled(
-    OledData(
-        pin_sda=_must_pin(OLED_SDA_PAD, "OLED_SDA"),
-        pin_scl=_must_pin(OLED_SCL_PAD, "OLED_SCL"),
-        i2c_addr=0x3C,
-    )
-)
-keyboard.extensions.append(oled)
+oled = None
+_oled_init_attempted = False
 
 encoder_handler = EncoderHandler()
 encoder_handler.pins = (
@@ -180,6 +180,29 @@ keyboard.col_pins = (
 keyboard.diode_orientation = DiodeOrientation.COL2ROW
 
 
+def _try_init_oled():
+    global oled, _oled_init_attempted
+    if oled is not None:
+        return True
+    if _oled_init_attempted:
+        return False
+    _oled_init_attempted = True
+    try:
+        oled = Oled(
+            OledData(
+                pin_sda=_must_pin(OLED_SDA_PAD, "OLED_SDA"),
+                pin_scl=_must_pin(OLED_SCL_PAD, "OLED_SCL"),
+                i2c_addr=0x3C,
+            )
+        )
+        keyboard.extensions.append(oled)
+        _log("OLED initialized")
+        return True
+    except Exception as e:
+        _log(f"OLED init skipped: {e}")
+        return False
+
+
 # Layer indices
 BASE = 0
 FN = 1
@@ -205,6 +228,8 @@ HALL_GESTURE_COOLDOWN_S = 0.7
 
 FUEL_GAUGE_I2C_ADDR = 0x36
 LOW_BATTERY_PERCENT = 20.0
+DEFERRED_INIT_DELAY_S = 1.5
+VERBOSE_BOOT_LOG = True
 
 IR_MAX_SLOTS = 12
 MACRO_MAX_SLOTS = 12
@@ -235,6 +260,14 @@ LCD_BL_PIN_NAME = "LCD_BL"
 LCD_SPI_SCK_PIN_NAME = "LCD_SCL"
 LCD_SPI_MOSI_PIN_NAME = "LCD_SDA"
 LCD_SPI_MISO_PIN_NAME = "LCD_MISO"
+
+
+def _log(msg: str) -> None:
+    if VERBOSE_BOOT_LOG:
+        try:
+            print(f"[macropad] {msg}")
+        except Exception:
+            pass
 
 
 @dataclass
@@ -428,6 +461,30 @@ class LCDUIState:
 
 
 lcd_ui = LCDUIState()
+_boot_started_at = time.monotonic()
+_deferred_init_done = False
+
+
+def _run_deferred_init() -> None:
+    global _deferred_init_done
+    if _deferred_init_done:
+        return
+    if (time.monotonic() - _boot_started_at) < DEFERRED_INIT_DELAY_S:
+        return
+    _deferred_init_done = True
+    _ensure_fuel_gauge()
+    _try_init_oled()
+
+
+class RuntimeHooks(Module):
+    def before_matrix_scan(self, *_args, **_kwargs):
+        apply_runtime()
+
+    def after_hid_send(self, *_args, **_kwargs):
+        apply_runtime()
+
+
+keyboard.modules.append(RuntimeHooks())
 
 
 UI_ACTION_PRESETS: list[tuple[str, str, object]] = [
@@ -499,10 +556,25 @@ def _try_init_fuel_gauge():
         return None
 
 
-_fuel_gauge = _try_init_fuel_gauge()
-if _fuel_gauge is not None:
-    fuel_gauge.available = True
-    fuel_gauge.source = "MAX17048"
+_fuel_gauge = None
+_fuel_gauge_init_attempted = False
+
+
+def _ensure_fuel_gauge():
+    global _fuel_gauge, _fuel_gauge_init_attempted
+    if _fuel_gauge is not None:
+        return True
+    if _fuel_gauge_init_attempted:
+        return False
+    _fuel_gauge_init_attempted = True
+    _fuel_gauge = _try_init_fuel_gauge()
+    if _fuel_gauge is not None:
+        fuel_gauge.available = True
+        fuel_gauge.source = "MAX17048"
+        _log("Fuel gauge initialized")
+        return True
+    _log("Fuel gauge init skipped")
+    return False
 
 
 def update_power_status():
@@ -2237,6 +2309,7 @@ def webui_start() -> bool:
 
 def apply_runtime():
     # Call this periodically from your board loop hook.
+    _run_deferred_init()
     update_power_status()
     ui_update_overlay_state()
     pomodoro_tick()
