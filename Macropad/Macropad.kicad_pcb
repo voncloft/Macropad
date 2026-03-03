@@ -2951,7 +2951,7 @@
 				)
 			)
 		)
-		(property "Value" "2k"
+		(property "Value" "3.3k"
 			(at 0 1.2 0)
 			(layer "F.Fab")
 			(uuid "ee6af25e-b61e-4071-a1af-4cab42479d46")
@@ -7274,14 +7274,14 @@
 			(net 21 "3V3")
 			(uuid "a1b4a7f8-25e1-4659-bd68-e0fdbd5b7a91")
 		)
-		(pad "3" smd roundrect
-			(at -3.15 2.3)
-			(size 2 1.5)
-			(layers "F.Cu" "F.Mask" "F.Paste")
-			(roundrect_rratio 0.25)
-			(net 50 "BAT+")
-			(uuid "8f9c72ea-4afe-4e8b-90a7-283ef62be8ca")
-		)
+			(pad "3" smd roundrect
+				(at -3.15 2.3)
+				(size 2 1.5)
+				(layers "F.Cu" "F.Mask" "F.Paste")
+				(roundrect_rratio 0.25)
+				(net 22 "5V")
+				(uuid "8f9c72ea-4afe-4e8b-90a7-283ef62be8ca")
+			)
 		(embedded_fonts no)
 		(model "${KICAD9_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-223.step"
 			(offset
@@ -7594,7 +7594,7 @@
 				)
 			)
 		)
-		(property "Value" "100k"
+		(property "Value" "162k"
 			(at 0 1.2 0)
 			(layer "F.Fab")
 			(uuid "7276b117-b9ff-421c-8bb5-1c90ce5f947d")
@@ -15117,10 +15117,10 @@
 	)
 	(segment
 		(start 94.85 -31.7)
-		(end 27.85 -11.7)
+		(end 92.25 -25.46)
 		(width 0.3)
 		(layer "F.Cu")
-		(net 50)
+		(net 22)
 		(uuid "9dc553db-b2b2-4a69-b010-72cce3e80bb0")
 	)
 	(segment
