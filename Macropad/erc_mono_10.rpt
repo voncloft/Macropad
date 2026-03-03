@@ -1,0 +1,11 @@
+ERC report (2026-03-02T22:17:55-0500, Encoding UTF8)
+
+***** Sheet /
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(167.64 mm, 134.62 mm): Horizontal Wire, length 7.62 mm
+[global_label_dangling]: Global label not connected anywhere else in the schematic
+    ; warning
+    @(280.67 mm, 68.58 mm): Global Label 'ROW5'
+
+ ** ERC messages: 2  Errors 0  Warnings 2

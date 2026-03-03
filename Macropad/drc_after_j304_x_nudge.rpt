@@ -1,0 +1,14 @@
+** Drc report for Macropad.kicad_pcb **
+** Created on 2026-03-02T21:42:39-0500 **
+
+** Found 1 DRC violations **
+[hole_to_hole]: Drilled hole too close to other hole (board setup constraints min 0.2495 mm; actual 0.0000 mm)
+    Rule: board setup constraints; warning
+    @(41.0000 mm, -6.5000 mm): PTH pad 5 [TOUCH_INT] of J304
+    @(40.3100 mm, -6.5000 mm): PTH pad 1 [3V3] of J302
+
+** Found 0 unconnected pads **
+
+** Found 0 Footprint errors **
+
+** End of Report **

@@ -1,0 +1,13 @@
+ERC report (2026-03-02T22:16:35-0500, Encoding UTF8)
+
+***** Sheet /
+[multiple_net_names]: Both COL0 and ROW3 are attached to the same items; COL0 will be used in the netlist
+    ; warning
+    @(69.85 mm, 35.56 mm): Global Label 'COL0'
+    @(97.79 mm, 95.25 mm): Global Label 'ROW3'
+[no_connect_connected]: A pin with a "no connection" flag is connected
+    ; warning
+    @(359.41 mm, 171.45 mm): Symbol J401 Pin 1 [Pin_1, Passive, Line]
+    @(346.71 mm, 149.86 mm): No Connect
+
+ ** ERC messages: 2  Errors 0  Warnings 2
