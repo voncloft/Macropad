@@ -17,6 +17,10 @@ Current hardware state
 - Hall input net is reserved as `HALL_OUT` on MCU pad 35.
 - Display bus uses `LCD_SDA` / `LCD_SCL`.
 - Encoder uses `ENC_A`, `ENC_B`, `ENC_SW`.
+- USB-C (`J402`) is now configured for both charge/power and USB data flashing:
+  - `VBUS` + `CC` keep battery charge/power path.
+  - `USB_D+`/`USB_D-` are routed to ESP32-S3 USB pins.
+  - `TOUCH_INT` moved to module pad `16` in firmware/PCB mapping.
 
 What this scaffold is
 - A practical template (`firmware/kmk/main.py`) showing feature logic and structure.

@@ -33,6 +33,47 @@ keyboard.modules.append(layers)
 TARGET_MCU = "ESP32-S3-WROOM-1-N8R8"
 TARGET_PIN_PREFIX = "IO"
 
+# ESP32-S3-WROOM-1 module pad number -> GPIO number.
+# KMK/CircuitPython uses GPIO naming (board.IOxx), not module pad numbers.
+MODULE_PAD_TO_GPIO = {
+    4: 4,
+    5: 5,
+    6: 6,
+    7: 7,
+    8: 15,
+    9: 16,
+    10: 17,
+    11: 18,
+    12: 8,
+    13: 19,
+    14: 20,
+    15: 3,
+    16: 46,
+    17: 9,
+    18: 10,
+    19: 11,
+    20: 12,
+    21: 13,
+    22: 14,
+    23: 21,
+    24: 47,
+    25: 48,
+    26: 45,
+    27: 0,
+    28: 35,
+    29: 36,
+    30: 37,
+    31: 38,
+    32: 39,
+    33: 40,
+    34: 41,
+    35: 42,
+    36: 44,
+    37: 43,
+    38: 2,
+    39: 1,
+}
+
 # I2C touch + shared SPI SD setup:
 # - Touch controller (#2090-style): SDA=U901 pad 24, SCL=U901 pad 26
 # - SD card on shared SPI: MISO=U901 pad 25, CS=U901 pad 27
@@ -47,7 +88,7 @@ ROW0_PAD = 4
 ROW1_PAD = 5
 ROW2_PAD = 6
 ROW3_PAD = 7
-ROW4_PAD = 12
+ROW4_PAD = 8
 ROW5_PAD = 17
 COL0_PAD = 18
 COL1_PAD = 19
@@ -56,6 +97,7 @@ COL3_PAD = 21
 COL4_PAD = 22
 
 RGB_DATA_PAD = 23
+TOUCH_INT_PAD = 15
 ENC_A_PAD = 30
 ENC_B_PAD = 31
 ENC_SW_PAD = 32
@@ -64,26 +106,32 @@ OLED_SDA_PAD = TOUCH_SDA_PAD
 OLED_SCL_PAD = TOUCH_SCL_PAD
 
 
-def _resolve_pin(pad: int):
+def _resolve_pin(gpio: int):
     if board is None:
         return None
     # Hard requirement: ESP32-S3 style board pin naming.
     # This intentionally rejects RP2040-style GPxx to prevent target drift.
-    name = f"{TARGET_PIN_PREFIX}{pad}"
+    name = f"{TARGET_PIN_PREFIX}{gpio}"
     if hasattr(board, name):
         return getattr(board, name)
     # Some board definitions expose raw GPIOxx symbols; accept as secondary.
-    alt = f"GPIO{pad}"
+    alt = f"GPIO{gpio}"
     if hasattr(board, alt):
         return getattr(board, alt)
     return None
 
 
 def _must_pin(pad: int, net_name: str):
-    pin = _resolve_pin(pad)
+    gpio = MODULE_PAD_TO_GPIO.get(pad)
+    if gpio is None:
+        raise ValueError(
+            f"[{TARGET_MCU}] no module-pad->GPIO map for {net_name}: pad {pad}"
+        )
+    pin = _resolve_pin(gpio)
     if pin is None:
         raise ValueError(
-            f"[{TARGET_MCU}] missing pin mapping for {net_name}: expected IO{pad}/GPIO{pad}"
+            f"[{TARGET_MCU}] missing pin mapping for {net_name}: "
+            f"module pad {pad} -> expected IO{gpio}/GPIO{gpio}"
         )
     return pin
 
