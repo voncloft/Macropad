@@ -60,7 +60,8 @@ LCD_BACK_RELIEF_DEPTH = 5.5
 LCD_SOLDER_CHANNEL_SIZE = (16.0, 6.0)
 LCD_SOLDER_CHANNEL_Y_OFFSET = -28.0
 OLED_WINDOW_ANCHOR_REF = "J302"
-OLED_OFFSET_FROM_ANCHOR = (-39.10, 13.6)
+# Keep LCD window centered at the existing case location after relocating J302.
+OLED_OFFSET_FROM_ANCHOR = (-1.10, 9.6)
 
 # Local underside relief for LCD rear connector/solder joints.
 LCD_BACK_PORT_ESCAPE_SIZE = (34.0, 12.0)  # (x span, y span)

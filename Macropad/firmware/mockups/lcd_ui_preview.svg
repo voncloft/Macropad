@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f2027"/>
+      <stop offset="55%" stop-color="#203a43"/>
+      <stop offset="100%" stop-color="#2c5364"/>
+    </linearGradient>
+    <linearGradient id="lcd" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a0f12"/>
+      <stop offset="100%" stop-color="#151e24"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+    <style>
+      .title{font:700 28px 'DejaVu Sans',sans-serif;fill:#f0f6fa;letter-spacing:.5px}
+      .sub{font:400 15px 'DejaVu Sans',sans-serif;fill:#b8c6cf}
+      .label{font:600 13px 'DejaVu Sans',sans-serif;fill:#dce8ef}
+      .small{font:500 12px 'DejaVu Sans',sans-serif;fill:#96a9b4}
+      .screenTitle{font:700 16px 'DejaVu Sans',sans-serif;fill:#e7f3ff}
+      .screenText{font:500 12px 'DejaVu Sans',sans-serif;fill:#b7cad7}
+      .btn{fill:#1e2c34;stroke:#36505f;stroke-width:1}
+      .btnHi{fill:#27414d;stroke:#4d7a8f;stroke-width:1.2}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1280" height="720" fill="url(#bg)"/>
+
+  <text x="58" y="64" class="title">Macropad LCD UI Preview</text>
+  <text x="58" y="91" class="sub">Home, Dashboard, Macro, IR, Hall, and Toggles pages with icon-driven actions</text>
+
+  <g transform="translate(55,120)" filter="url(#shadow)">
+    <rect x="0" y="0" rx="28" ry="28" width="760" height="520" fill="#1b252c" stroke="#3c515f" stroke-width="2"/>
+    <rect x="36" y="34" rx="14" ry="14" width="688" height="168" fill="url(#lcd)" stroke="#2f4b5a" stroke-width="2"/>
+    <text x="56" y="64" class="screenTitle">HOME</text>
+    <text x="56" y="84" class="screenText">Layer: 3 • Battery: 84% • Charging: YES</text>
+    <text x="56" y="102" class="screenText">IR learn slot: 26 active • Candidate ready</text>
+    <text x="56" y="120" class="screenText">Hall gesture: swipe-right → dashboard_power</text>
+
+    <g transform="translate(50,132)">
+      <rect x="0" y="0" width="88" height="50" rx="10" class="btnHi"/>
+      <text x="21" y="31" class="label">HOME</text>
+      <rect x="100" y="0" width="88" height="50" rx="10" class="btn"/>
+      <text x="114" y="31" class="label">MACRO</text>
+      <rect x="200" y="0" width="88" height="50" rx="10" class="btn"/>
+      <text x="229" y="31" class="label">IR</text>
+      <rect x="300" y="0" width="88" height="50" rx="10" class="btn"/>
+      <text x="322" y="31" class="label">HALL</text>
+      <rect x="400" y="0" width="88" height="50" rx="10" class="btn"/>
+      <text x="413" y="31" class="label">POWER</text>
+      <rect x="500" y="0" width="88" height="50" rx="10" class="btn"/>
+      <text x="520" y="31" class="label">TOOLS</text>
+    </g>
+
+    <g transform="translate(52,242)">
+      <text x="0" y="-12" class="sub">Key matrix (6x5) with SW1 tap dance layer switch</text>
+      <g fill="#23323a" stroke="#3e5a69" stroke-width="1">
+        <rect x="0" y="0" width="90" height="52" rx="8"/>
+        <rect x="104" y="0" width="90" height="52" rx="8"/>
+        <rect x="208" y="0" width="90" height="52" rx="8"/>
+        <rect x="312" y="0" width="90" height="52" rx="8"/>
+        <rect x="416" y="0" width="90" height="52" rx="8"/>
+        <rect x="520" y="0" width="90" height="52" rx="8"/>
+
+        <rect x="0" y="66" width="90" height="52" rx="8"/>
+        <rect x="104" y="66" width="90" height="52" rx="8"/>
+        <rect x="208" y="66" width="90" height="52" rx="8"/>
+        <rect x="312" y="66" width="90" height="52" rx="8"/>
+        <rect x="416" y="66" width="90" height="52" rx="8"/>
+        <rect x="520" y="66" width="90" height="52" rx="8"/>
+
+        <rect x="0" y="132" width="90" height="52" rx="8"/>
+        <rect x="104" y="132" width="90" height="52" rx="8"/>
+        <rect x="208" y="132" width="90" height="52" rx="8"/>
+        <rect x="312" y="132" width="90" height="52" rx="8"/>
+        <rect x="416" y="132" width="90" height="52" rx="8"/>
+        <rect x="520" y="132" width="90" height="52" rx="8"/>
+
+        <rect x="0" y="198" width="90" height="52" rx="8" fill="#2f5565" stroke="#74a7bf"/>
+        <rect x="104" y="198" width="90" height="52" rx="8"/>
+        <rect x="208" y="198" width="90" height="52" rx="8"/>
+        <rect x="312" y="198" width="90" height="52" rx="8"/>
+        <rect x="416" y="198" width="90" height="52" rx="8"/>
+        <rect x="520" y="198" width="90" height="52" rx="8" fill="#3f2f46" stroke="#aa7bbb"/>
+
+        <rect x="0" y="264" width="90" height="52" rx="8"/>
+        <rect x="104" y="264" width="90" height="52" rx="8"/>
+        <rect x="208" y="264" width="90" height="52" rx="8"/>
+        <rect x="312" y="264" width="90" height="52" rx="8"/>
+        <rect x="416" y="264" width="90" height="52" rx="8"/>
+        <rect x="520" y="264" width="90" height="52" rx="8"/>
+      </g>
+      <text x="17" y="229" class="label">SW1</text>
+      <text x="537" y="229" class="label">K26</text>
+      <text x="0" y="336" class="small">K26 on Layer 3: IR scan/learn toggle • Any non-SW1/non-K26 key: save candidate</text>
+    </g>
+  </g>
+
+  <g transform="translate(855,120)">
+    <text x="0" y="0" class="title" font-size="22">LCD Pages</text>
+
+    <g transform="translate(0,24)">
+      <rect x="0" y="0" width="370" height="76" rx="12" fill="#162129" stroke="#355160"/>
+      <text x="16" y="28" class="screenTitle">Dashboard</text>
+      <text x="16" y="49" class="screenText">Battery/USB status, charging current, thermal alerts</text>
+    </g>
+
+    <g transform="translate(0,112)">
+      <rect x="0" y="0" width="370" height="76" rx="12" fill="#162129" stroke="#355160"/>
+      <text x="16" y="28" class="screenTitle">Macro</text>
+      <text x="16" y="49" class="screenText">Record/play macros and slot state indicators</text>
+    </g>
+
+    <g transform="translate(0,200)">
+      <rect x="0" y="0" width="370" height="76" rx="12" fill="#162129" stroke="#355160"/>
+      <text x="16" y="28" class="screenTitle">IR</text>
+      <text x="16" y="49" class="screenText">Learn candidate, save to selected key, replay saved code</text>
+    </g>
+
+    <g transform="translate(0,288)">
+      <rect x="0" y="0" width="370" height="76" rx="12" fill="#162129" stroke="#355160"/>
+      <text x="16" y="28" class="screenTitle">Hall</text>
+      <text x="16" y="49" class="screenText">Gesture mode, threshold tuning, live magnet readout</text>
+    </g>
+
+    <g transform="translate(0,376)">
+      <rect x="0" y="0" width="370" height="76" rx="12" fill="#162129" stroke="#355160"/>
+      <text x="16" y="28" class="screenTitle">Toggles / Power</text>
+      <text x="16" y="49" class="screenText">Long-press safety actions, USB/battery routing status</text>
+    </g>
+
+    <text x="0" y="486" class="small">Preview artifact generated from current firmware/UI direction.</text>
+  </g>
+</svg>

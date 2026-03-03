@@ -1,5 +1,10 @@
 Macropad Rev-B Firmware Scaffold
 
+Fixed MCU Target (Set In Stone)
+- `ESP32-S3-WROOM-1-N8R8` only.
+- Firmware pin mapping is `IOxx` / `GPIOxx` style.
+- Do not use RP2040-style `GPxx` in this project.
+
 Purpose
 - Provide a starting firmware structure for:
   - Per-key RGB effects (#1)
