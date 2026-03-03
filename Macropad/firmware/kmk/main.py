@@ -107,6 +107,7 @@ TOUCH_INT_PAD = 15
 ENC_A_PAD = 30
 ENC_B_PAD = 31
 ENC_SW_PAD = 32
+IR_TX_PAD = 29
 
 OLED_SDA_PAD = TOUCH_SDA_PAD
 OLED_SCL_PAD = TOUCH_SCL_PAD
@@ -140,6 +141,13 @@ def _must_pin(pad: int, net_name: str):
             f"module pad {pad} -> expected IO{gpio}/GPIO{gpio}"
         )
     return pin
+
+
+def _optional_pin(pad: int):
+    gpio = MODULE_PAD_TO_GPIO.get(pad)
+    if gpio is None:
+        return None
+    return _resolve_pin(gpio)
 
 # Placeholder extension setup (replace with your board pin mapping).
 rgb = RGB(
@@ -239,6 +247,9 @@ POMODORO_BREAK_MIN = 5
 
 SW1_TAP_WINDOW_S = 0.35
 IR_SCAN_PERIOD_S = 0.65
+IR_TX_DEFAULT_FREQ_HZ = 38000
+HALL_KEY_REPEAT_S = 0.12
+WIFI_STATUS_POLL_S = 1.0
 
 LCD_W = 320
 LCD_H = 240
@@ -280,6 +291,7 @@ class RuntimeState:
     hall_mode: str = "volume"       # volume | scrub | zoom
     hall_gesture_armed: bool = True
     hall_last_gesture_at: float = 0.0
+    hall_last_emit_at: float = 0.0
     battery_percent: float = 100.0
     battery_voltage: float = 4.1
     ir_learning: bool = False
@@ -288,6 +300,12 @@ class RuntimeState:
     macro_record_slot: int = -1
     webui_enabled: bool = False
     webui_url: str = "http://macropad.local/"
+    wifi_connected: bool = False
+    wifi_ssid: str = ""
+    wifi_ip: str = ""
+    wifi_subnet: str = ""
+    wifi_gateway: str = ""
+    wifi_last_poll_at: float = 0.0
     ir_scan_status: str = "idle"
     ui_page: str = "home"
     ui_status: str = "ready"
@@ -320,6 +338,8 @@ class IRLearnStore:
 
 
 ir_store = IRLearnStore()
+_ir_tx_init_attempted = False
+_ir_pulseout = None
 
 
 @dataclass
@@ -463,6 +483,8 @@ class LCDUIState:
 lcd_ui = LCDUIState()
 _boot_started_at = time.monotonic()
 _deferred_init_done = False
+_web_server = None
+_web_server_poll = None
 
 
 def _run_deferred_init() -> None:
@@ -589,6 +611,45 @@ def update_power_status():
         pass
 
 
+def update_wifi_status(force: bool = False) -> None:
+    now = time.monotonic()
+    if not force and (now - state.wifi_last_poll_at) < WIFI_STATUS_POLL_S:
+        return
+    state.wifi_last_poll_at = now
+    try:
+        import wifi  # type: ignore
+    except Exception:
+        state.wifi_connected = False
+        state.wifi_ssid = ""
+        state.wifi_ip = ""
+        state.wifi_subnet = ""
+        state.wifi_gateway = ""
+        return
+    try:
+        radio = wifi.radio
+        ip = getattr(radio, "ipv4_address", None)
+        subnet = getattr(radio, "ipv4_subnet", None)
+        gateway = getattr(radio, "ipv4_gateway", None)
+        ssid = ""
+        try:
+            ap_info = getattr(radio, "ap_info", None)
+            if ap_info is not None and getattr(ap_info, "ssid", None):
+                ssid = str(ap_info.ssid)
+        except Exception:
+            ssid = ""
+        state.wifi_connected = ip is not None
+        state.wifi_ssid = ssid
+        state.wifi_ip = str(ip) if ip is not None else ""
+        state.wifi_subnet = str(subnet) if subnet is not None else ""
+        state.wifi_gateway = str(gateway) if gateway is not None else ""
+    except Exception:
+        state.wifi_connected = False
+        state.wifi_ssid = ""
+        state.wifi_ip = ""
+        state.wifi_subnet = ""
+        state.wifi_gateway = ""
+
+
 # OLED page framework
 OLED_PAGE_LAYER = 0
 OLED_PAGE_POWER = 1
@@ -608,7 +669,8 @@ def oled_render() -> str:
             f"POWER:{state.power_status} "
             f"{state.battery_percent:0.0f}% "
             f"{state.battery_voltage:0.2f}V "
-            f"HALL:{int(state.hall_filtered)}"
+            f"HALL:{int(state.hall_filtered)} "
+            f"WIFI:{'UP' if state.wifi_connected else 'DOWN'}"
         )
     if pomodoro.running:
         mode = "BREAK" if pomodoro.on_break else "WORK"
@@ -988,10 +1050,21 @@ def ui_define_pages() -> None:
         ],
         "dashboard_power": [
             IconButton("dp_back", "Back", 8, 8, 70, 40, "nav", "dashboard"),
-            IconButton("dp_web", "WebUI", 84, 8, 70, 40, "webui_start"),
-            IconButton("dp_pomo", "Pomo", 160, 8, 70, 40, "pomo_toggle"),
-            IconButton("dp_cfg_save", "SaveCfg", 236, 8, 74, 40, "cfg_save"),
-            IconButton("dp_cfg_load", "LoadCfg", 8, 54, 74, 40, "cfg_load"),
+            IconButton("dp_wifi", "WiFi", 84, 8, 70, 40, "nav", "wifi"),
+            IconButton("dp_web", "WebUI", 160, 8, 70, 40, "webui_start"),
+            IconButton("dp_pomo", "Pomo", 236, 8, 70, 40, "pomo_toggle"),
+            IconButton("dp_cfg_save", "SaveCfg", 8, 54, 74, 40, "cfg_save"),
+            IconButton("dp_cfg_load", "LoadCfg", 88, 54, 74, 40, "cfg_load"),
+        ],
+        "wifi": [
+            IconButton("wf_back", "Back", 8, 8, 70, 40, "nav", "dashboard_power"),
+            IconButton("wf_refresh", "Refresh", 84, 8, 70, 40, "wifi_refresh"),
+            IconButton("wf_web", "Start Web", 160, 8, 90, 40, "webui_start"),
+            IconButton("wf_link", f"Link:{'UP' if state.wifi_connected else 'DOWN'}", 8, 54, 148, 36, "wifi_refresh"),
+            IconButton("wf_ssid", f"SSID:{state.wifi_ssid or '-'}", 160, 54, 152, 36, "wifi_refresh"),
+            IconButton("wf_ip", f"IP:{state.wifi_ip or '-'}", 8, 96, 304, 32, "wifi_refresh"),
+            IconButton("wf_subnet", f"Subnet:{state.wifi_subnet or '-'}", 8, 134, 304, 32, "wifi_refresh"),
+            IconButton("wf_gateway", f"Gateway:{state.wifi_gateway or '-'}", 8, 172, 304, 32, "wifi_refresh"),
         ],
         "macro_prog_pick": [
             IconButton("mp_cancel", "Cancel", 8, 8, 70, 36, "macro_prog_cancel"),
@@ -1066,6 +1139,10 @@ def _ui_run_action(icon: IconButton, held_s: float = 0.0) -> bool:
         state.ui_page = str(p)
         if state.ui_page == "keylist":
             _ui_set_keylist_status()
+        elif state.ui_page == "wifi":
+            update_wifi_status(force=True)
+            ui_define_pages()
+            state.ui_status = f"wifi:{'up' if state.wifi_connected else 'down'}"
     elif a == "macro_prog_start":
         macro_program_start()
     elif a == "macro_prog_layer_pick":
@@ -1175,6 +1252,13 @@ def _ui_run_action(icon: IconButton, held_s: float = 0.0) -> bool:
         ir_learn_commit()
     elif a == "hall_mode":
         state.hall_mode = str(p)
+    elif a == "wifi_refresh":
+        update_wifi_status(force=True)
+        ui_define_pages()
+        state.ui_status = (
+            f"wifi:{'up' if state.wifi_connected else 'down'} "
+            f"ip:{state.wifi_ip or '-'}"
+        )
     elif a == "toggle":
         name = str(p)
         if hasattr(toggles, name):
@@ -1283,6 +1367,11 @@ def ui_update_overlay_state() -> None:
     lcd_ui.battery_badge_pct = max(0, min(100, int(round(state.battery_percent))))
     if state.ui_page == "keylist":
         _ui_set_keylist_status()
+    elif state.ui_page == "wifi":
+        state.ui_status = (
+            f"wifi:{'up' if state.wifi_connected else 'down'} "
+            f"ip:{state.wifi_ip or '-'}"
+        )
 
 
 def lcd_render_model() -> dict:
@@ -1301,6 +1390,11 @@ def lcd_render_model() -> dict:
         "keylist_layer": lcd_ui.keylist_layer,
         "keylist_offset": lcd_ui.keylist_offset,
         "keylist_rows": ui_keylist_visible_rows() if state.ui_page == "keylist" else [],
+        "wifi_connected": state.wifi_connected,
+        "wifi_ssid": state.wifi_ssid,
+        "wifi_ip": state.wifi_ip,
+        "wifi_subnet": state.wifi_subnet,
+        "wifi_gateway": state.wifi_gateway,
     }
 
 
@@ -1398,18 +1492,52 @@ def ir_send_slot(slot: int) -> bool:
     code = ir_store.slots.get(slot)
     if code is None:
         return False
-    # TODO: connect to your IR TX backend (PWM + pulse train).
-    # Example flow:
-    #   ir_tx.send(freq_hz=code.freq_hz, pulses_us=code.pulses_us)
-    return True
+    return ir_send_code(code)
 
 
 def ir_send_code(code: IRCode) -> bool:
-    # TODO: connect to your IR TX backend (PWM + pulse train).
-    # Example flow:
-    #   ir_tx.send(freq_hz=code.freq_hz, pulses_us=code.pulses_us)
-    _ = code
-    return True
+    global _ir_tx_init_attempted, _ir_pulseout
+    if not code.pulses_us:
+        return False
+    if _ir_pulseout is None and not _ir_tx_init_attempted:
+        _ir_tx_init_attempted = True
+        try:
+            import pwmio  # type: ignore
+            import pulseio  # type: ignore
+
+            pin = _optional_pin(IR_TX_PAD)
+            if pin is None:
+                _log("IR TX init skipped: unresolved IR_TX pin")
+                return False
+            pwm = pwmio.PWMOut(
+                pin,
+                duty_cycle=2 ** 15,
+                frequency=max(1000, int(code.freq_hz or IR_TX_DEFAULT_FREQ_HZ)),
+                variable_frequency=True,
+            )
+            _ir_pulseout = pulseio.PulseOut(pwm)
+            _log("IR TX initialized")
+        except Exception as e:
+            _log(f"IR TX init failed: {e}")
+            _ir_pulseout = None
+            return False
+    if _ir_pulseout is None:
+        return False
+    try:
+        _ir_pulseout.frequency = max(1000, int(code.freq_hz or IR_TX_DEFAULT_FREQ_HZ))
+        pulses: list[int] = []
+        for p in code.pulses_us:
+            v = int(p)
+            if v <= 0:
+                continue
+            pulses.append(min(65535, v))
+        if not pulses:
+            return False
+        _ir_pulseout.send(pulses)
+        return True
+    except Exception as e:
+        _log(f"IR TX send failed: {e}")
+        return False
 
 
 def ir_scan_prepare_candidates_from_known_codes() -> None:
@@ -2231,6 +2359,13 @@ def _webui_snapshot() -> dict:
         "ui_custom_buttons": ui_custom,
         "context_app": state.context_app,
         "context_auto": state.context_auto,
+        "wifi": {
+            "connected": state.wifi_connected,
+            "ssid": state.wifi_ssid,
+            "ip": state.wifi_ip,
+            "subnet": state.wifi_subnet,
+            "gateway": state.wifi_gateway,
+        },
         "toggles": {
             "rgb_dynamic": toggles.rgb_dynamic,
             "haptics_enabled": toggles.haptics_enabled,
@@ -2300,21 +2435,99 @@ def webui_apply_json(payload: str) -> bool:
 
 
 def webui_start() -> bool:
-    # Lightweight AP/web hook point.
-    # TODO: wire to wifi/radio + http server stack on your target board.
+    global _web_server, _web_server_poll
     state.webui_enabled = True
-    state.webui_url = "http://macropad.local/"
-    return True
+    if _web_server is not None:
+        return True
+    try:
+        import wifi  # type: ignore
+        import socketpool  # type: ignore
+        from adafruit_httpserver import (  # type: ignore
+            GET,
+            POST,
+            JSONResponse,
+            Request,
+            Response,
+            Server,
+        )
+    except Exception as e:
+        state.ui_status = "webui:libs_missing"
+        _log(f"WebUI init failed: {e}")
+        return False
+
+    ssid = os.getenv("CIRCUITPY_WIFI_SSID") or os.getenv("WIFI_SSID") or os.getenv("CP_WIFI_SSID")
+    password = (
+        os.getenv("CIRCUITPY_WIFI_PASSWORD")
+        or os.getenv("WIFI_PASSWORD")
+        or os.getenv("CP_WIFI_PASSWORD")
+    )
+    if not ssid or not password:
+        state.ui_status = "webui:wifi_cfg_missing"
+        return False
+    try:
+        if not getattr(wifi.radio, "ipv4_address", None):
+            wifi.radio.connect(ssid, password)
+        pool = socketpool.SocketPool(wifi.radio)
+        server = Server(pool, debug=False)
+        ip = str(wifi.radio.ipv4_address)
+
+        @server.route("/", GET)
+        def _root(request: Request):
+            return Response(
+                request,
+                body=(
+                    "Macropad WebUI\n"
+                    "GET /snapshot -> runtime json\n"
+                    "POST /apply -> apply json config"
+                ),
+                content_type="text/plain",
+            )
+
+        @server.route("/snapshot", GET)
+        def _snapshot(request: Request):
+            return JSONResponse(request, _webui_snapshot())
+
+        @server.route("/apply", POST)
+        def _apply(request: Request):
+            try:
+                payload = request.body.decode("utf-8")
+            except Exception:
+                payload = ""
+            ok = webui_apply_json(payload)
+            return JSONResponse(request, {"ok": bool(ok), "status": state.ui_status})
+
+        server.start(ip)
+        _web_server = server
+        _web_server_poll = server.poll
+        state.webui_url = f"http://{ip}/"
+        update_wifi_status(force=True)
+        ui_define_pages()
+        state.ui_status = "webui:ready"
+        _log(f"WebUI started at {state.webui_url}")
+        return True
+    except Exception as e:
+        _web_server = None
+        _web_server_poll = None
+        state.ui_status = "webui:start_fail"
+        _log(f"WebUI start failed: {e}")
+        return False
 
 
 def apply_runtime():
     # Call this periodically from your board loop hook.
     _run_deferred_init()
     update_power_status()
+    update_wifi_status()
     ui_update_overlay_state()
     pomodoro_tick()
     sw1_tap_tick()
     ir_scan_tick()
+    if callable(_web_server_poll):
+        try:
+            _web_server_poll()
+        except Exception as e:
+            state.ui_status = "webui:poll_fail"
+            _log(f"WebUI poll failed: {e}")
     ui_apply_context_page()
     set_layer_color(state.layer)
     apply_power_overlay(state.power_status)
@@ -2323,8 +2536,10 @@ def apply_runtime():
     hall_gesture_update(filtered)
     delta = hall_delta(filtered)
     if delta != 0:
-        _ = hall_to_action(delta)
-        # TODO: send key based on action using keyboard tap API for your KMK version.
+        now = time.monotonic()
+        if (now - state.hall_last_emit_at) >= HALL_KEY_REPEAT_S:
+            state.hall_last_emit_at = now
+            _emit_key(hall_to_action(delta))
 
 
 def set_active_layer(layer: int):
