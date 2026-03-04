@@ -22,12 +22,17 @@ import trimesh
 # -------- User-editable parameters --------
 PCB_PATH = Path("/home/von/Desktop/Macropad Project/Macropad/Macropad.kicad_pcb")
 PRODUCTION_BOM_PATH = Path("/home/von/Desktop/Macropad Project/Macropad/production/bom.csv")
+PRODUCTION_BOM_FALLBACK_PATH = Path("/home/von/Desktop/Macropad Project/Macropad/production/bom-bak.csv")
 PRODUCTION_POS_PATH = Path("/home/von/Desktop/Macropad Project/Macropad/production/positions.csv")
 GERBER_EDGE_PATH = Path("/home/von/Desktop/Macropad Project/Macropad/gerber/Macropad-Edge_Cuts.gm1")
+GERBER_EDGE_FALLBACK_PATH = Path("/home/von/Desktop/Macropad Project/Macropad/gerber/Macropad-Edge_Cuts.gbr")
 OUTPUT_BOTTOM_STL = Path("/home/von/Desktop/Macropad Project/case/macropad_case_bottom.stl")
 OUTPUT_TOP_STL = Path("/home/von/Desktop/Macropad Project/case/macropad_case_top.stl")
 OUTPUT_SIDE_BY_SIDE_STL = Path("/home/von/Desktop/Macropad Project/case/macropad_case_side_by_side.stl")
 OUTPUT_ASSEMBLED_STL = Path("/home/von/Desktop/Macropad Project/case/macropad_case_assembled.stl")
+OUTPUT_LCD_RETAINER_STL = Path("/home/von/Desktop/Macropad Project/case/macropad_case_lcd_retainer_plate.stl")
+OUTPUT_BOTTOM_PCB_PREVIEW_STL = Path("/home/von/Desktop/Macropad Project/case/macropad_case_bottom_with_pcb_preview.stl")
+OUTPUT_BOTTOM_PCB_EXPLODED_PREVIEW_STL = Path("/home/von/Desktop/Macropad Project/case/macropad_case_bottom_with_pcb_exploded_preview.stl")
 
 WALL = 2.4
 TOP_THICKNESS = 2.2
@@ -43,38 +48,56 @@ TILT_DEG = 4.0
 # MX/Kailh-compatible top cutouts (plate-style opening).
 SWITCH_HOLE_SIZE = (14.1, 14.1)
 
-# OLED/LCD flush mount zone at top.
-# View window: what you actually see (relative to OLED center anchor).
-# Current placement keeps bottom-left fixed and sets visible size to 69.6 x 45.2.
-OLED_WINDOW_BOTTOM_LEFT_OFFSET = (-68.0, -5.0)
-OLED_WINDOW_TOP_RIGHT_OFFSET = (1.6, 40.2)
-# Module face size tuned for a large rectangular display module (2.0in-class TFT/OLED board envelope).
-LCD_MODULE_FACE_SIZE = (72.0, 56.0)
-LCD_MODULE_FACE_CLEARANCE = 0.25
-LCD_FLUSH_DEPTH = 1.6
-# Hidden underside relief so solder joints/wires fit while top remains flush.
-LCD_BACK_RELIEF_SIZE = (69.0, 38.0)
-LCD_BACK_RELIEF_CLEARANCE = 0.6
-LCD_BACK_RELIEF_DEPTH = 5.5
-# Small tool/wire channel on the header side of the module.
-LCD_SOLDER_CHANNEL_SIZE = (16.0, 6.0)
-LCD_SOLDER_CHANNEL_Y_OFFSET = -28.0
-OLED_WINDOW_ANCHOR_REF = "J302"
-# Keep LCD window centered at the existing case location after relocating J302.
-OLED_OFFSET_FROM_ANCHOR = (-1.10, 9.6)
+# Adafruit 2090 mount zone.
+# Window is a true through-cut; PCB is retained from the back.
+LCD_MOUNT_CENTER_XY = (54.55, 37.60)
+LCD_MOUNT_CENTER_OFFSET = (-30.0, 0.0)  # (x, y) shift from center in case coords
+LCD_WINDOW_SIZE = (70.0, 46.0)
+# Keeps the PCB close to the front face without breaking through the roof.
+LCD_FRONT_LIP_THICKNESS = 0.90
+LCD_WINDOW_REAR_RELIEF_CLEARANCE = 0.60
 
-# Local underside relief for LCD rear connector/solder joints.
-LCD_BACK_PORT_ESCAPE_SIZE = (34.0, 12.0)  # (x span, y span)
-LCD_BACK_PORT_ESCAPE_Y_OFFSET = -27.0     # toward top edge of case
-LCD_BACK_PORT_ESCAPE_DEPTH = 5.5
-# LCD module mounting-hole pattern (underside of top shell).
+# Backside locating pocket for PCB outline.
+LCD_PCB_OUTLINE_SIZE = (81.3, 62.5)
+LCD_PCB_OUTLINE_CLEARANCE = 0.30
+LCD_PCB_POCKET_DEPTH = 4.60
+
+# Four mounting bosses at Adafruit's 3.00 x 2.25 in hole pattern.
 LCD_MOUNT_HOLE_SPACING = (76.2, 57.2)  # center-to-center (x, y)
-LCD_MOUNT_STUD_DIAMETER = 2.4
-LCD_MOUNT_STUD_HEIGHT = 3.4
-LCD_MOUNT_STUD_TIP_DIAMETER = 1.9
-LCD_MOUNT_STUD_TIP_HEIGHT = 0.9
-LCD_MOUNT_RETENTION_CAP_DIAMETER = 3.10
-LCD_MOUNT_RETENTION_CAP_HEIGHT = 1.00
+LCD_MOUNT_BOSS_DIAMETER = 7.0
+LCD_MOUNT_BOSS_HEIGHT = 3.8
+LCD_MOUNT_BOSS_HOLE_DIAMETER = 2.6
+LCD_MOUNT_BOSS_HOLE_DEPTH_EXTRA = 0.8
+
+# Optional standalone rear retainer plate for the LCD PCB.
+LCD_RETAINER_ENABLED = True
+LCD_RETAINER_THICKNESS = 2.0
+LCD_RETAINER_OUTER_MARGIN = 3.5
+LCD_RETAINER_WINDOW_SIZE = (72.0, 53.0)
+# Right-side opening in the retainer middle while preserving top/bottom right hole areas.
+LCD_RETAINER_RIGHT_OPEN_X = 30.0  # plate local X where middle opening starts
+LCD_RETAINER_RIGHT_OPEN_Y_SPAN = 40.0  # opening span centered on plate Y
+LCD_RETAINER_HOLE_DIAMETER = 2.8
+# Extra Z lift so PCB is clearly visible in generic STL viewers.
+PCB_PREVIEW_EXPLODE_Z = 12.0
+
+# Optional rear connector/header escape notch.
+# Header/jumper side for this build is the right-hand case edge (positive X).
+LCD_BACK_PORT_ESCAPE_ENABLED = True
+LCD_BACK_PORT_ESCAPE_SIZE = (10.0, 20.0)  # (x span, y span)
+LCD_BACK_PORT_ESCAPE_OFFSET = (30.0, 0.0)  # (x, y) from LCD center
+LCD_BACK_PORT_ESCAPE_DEPTH = 5.0
+
+# Right-wall wire exit channel + internal zip-tie strain relief.
+LCD_WIRE_EXIT_CHANNEL_ENABLED = True
+LCD_WIRE_EXIT_CHANNEL_SIZE = (14.0, 7.0)  # (y span, z span)
+LCD_WIRE_EXIT_CHANNEL_Y_OFFSET = 0.0
+LCD_WIRE_EXIT_CHANNEL_Z_FROM_POCKET_BOTTOM = 2.8
+LCD_STRAIN_RELIEF_ENABLED = True
+LCD_STRAIN_RELIEF_LUG_SIZE = (6.0, 14.0, 8.0)  # (x depth, y span, z span)
+LCD_STRAIN_RELIEF_SLOT_SIZE = (3.2, 4.0)  # (y span, z span) for zip-tie pass-through
+LCD_STRAIN_RELIEF_Y_OFFSET = 0.0
+LCD_STRAIN_RELIEF_Z_FROM_POCKET_BOTTOM = 0.8
 
 # Rotary encoder top circle opening (missing previously).
 ROTARY_HOLE_ANCHOR_REF = "SW401"
@@ -248,11 +271,13 @@ def boolean_union(meshes: List[trimesh.Trimesh]) -> trimesh.Trimesh:
 
 def validate_reference_files() -> None:
     # User requested gerber/production directory as reference point.
-    for p in (PRODUCTION_BOM_PATH, PRODUCTION_POS_PATH, GERBER_EDGE_PATH):
+    bom_path = PRODUCTION_BOM_PATH if PRODUCTION_BOM_PATH.exists() else PRODUCTION_BOM_FALLBACK_PATH
+    edge_path = GERBER_EDGE_PATH if GERBER_EDGE_PATH.exists() else GERBER_EDGE_FALLBACK_PATH
+    for p in (bom_path, PRODUCTION_POS_PATH, edge_path):
         if not p.exists():
             raise RuntimeError(f"Missing reference file: {p}")
 
-    with PRODUCTION_BOM_PATH.open(newline="", encoding="utf-8-sig") as f:
+    with bom_path.open(newline="", encoding="utf-8-sig") as f:
         rows = list(csv.DictReader(f))
     if not any((r.get("Footprint") or "").strip() == "Kailh_Hotswap_MX_1U_Custom" for r in rows):
         raise RuntimeError("Production BOM is missing Kailh hotswap footprint row.")
@@ -277,7 +302,6 @@ def main() -> None:
         SIDE_SWITCH_ANCHOR_REF,
         RESET_BUTTON_ANCHOR_REF,
         USB_CUTOUT_ANCHOR_REF,
-        OLED_WINDOW_ANCHOR_REF,
         ROTARY_HOLE_ANCHOR_REF,
         *PCB_STANDOFF_REFS,
     ]
@@ -307,6 +331,8 @@ def main() -> None:
 
     additions: List[trimesh.Trimesh] = []
     cutters: List[trimesh.Trimesh] = []
+    post_cut_additions: List[trimesh.Trimesh] = []
+    post_cut_cutters: List[trimesh.Trimesh] = []
 
     # PCB standoffs at equal height; ensure they exceed battery height + clearance.
     required_standoff_height = BATTERY_POCKET_SIZE[2] + BATTERY_TO_PCB_CLEARANCE
@@ -374,93 +400,126 @@ def main() -> None:
             )
         )
 
-    # LCD/OLED flush mount: top recess for module face + through view window.
-    oled_anchor = fps[OLED_WINDOW_ANCHOR_REF]
-    ox_raw, oy = pcb_to_case(
-        oled_anchor.x + OLED_OFFSET_FROM_ANCHOR[0],
-        oled_anchor.y + OLED_OFFSET_FROM_ANCHOR[1],
-    )
-    ox = outer_x - ox_raw if MIRROR_TOP_FEATURES_X else ox_raw
-    wblx, wbly = OLED_WINDOW_BOTTOM_LEFT_OFFSET
-    wtrx, wtry = OLED_WINDOW_TOP_RIGHT_OFFSET
-    mw, mh = LCD_MODULE_FACE_SIZE
-    pocket_w = mw + 2.0 * LCD_MODULE_FACE_CLEARANCE
-    pocket_h = mh + 2.0 * LCD_MODULE_FACE_CLEARANCE
-    # Keep pocket centered to the visible window so bezel thickness is uniform.
-    window_left = ox + wblx
-    window_bottom = oy + wbly
-    window_right = ox + wtrx
-    window_top = oy + wtry
-    pocket_cx = (window_left + window_right) / 2.0
-    pocket_cy = (window_bottom + window_top) / 2.0
-    pocket_left = pocket_cx - pocket_w / 2.0
-    pocket_bottom = pocket_cy - pocket_h / 2.0
-    pocket_right = pocket_cx + pocket_w / 2.0
-    pocket_top = pocket_cy + pocket_h / 2.0
+    # Rear-retained LCD mount:
+    # 1) true through-window for the visible area
+    # 2) backside locating pocket for PCB X/Y registration
+    # 3) 4 screw bosses on the 76.2 x 57.2 mm hole pattern
+    if not (LCD_WINDOW_SIZE[0] > 0.0 and LCD_WINDOW_SIZE[1] > 0.0):
+        raise RuntimeError("LCD window size must be positive.")
+    if not (0.2 < LCD_FRONT_LIP_THICKNESS < TOP_THICKNESS):
+        raise RuntimeError("LCD front lip thickness must be between 0.2 mm and TOP_THICKNESS.")
 
-    # Top recess so module face can sit flush with the case top.
+    base_lcd_cx, base_lcd_cy = LCD_MOUNT_CENTER_XY
+    lcd_off_x, lcd_off_y = LCD_MOUNT_CENTER_OFFSET
+    lcd_cx = base_lcd_cx + lcd_off_x
+    lcd_cy = base_lcd_cy + lcd_off_y
+    window_w, window_h = LCD_WINDOW_SIZE
+    pocket_w = LCD_PCB_OUTLINE_SIZE[0] + 2.0 * LCD_PCB_OUTLINE_CLEARANCE
+    pocket_h = LCD_PCB_OUTLINE_SIZE[1] + 2.0 * LCD_PCB_OUTLINE_CLEARANCE
+    min_lcd_cx = WALL + pocket_w / 2.0
+    max_lcd_cx = outer_x - WALL - pocket_w / 2.0
+    min_lcd_cy = WALL + pocket_h / 2.0
+    max_lcd_cy = outer_y - WALL - pocket_h / 2.0
+    clamped_lcd_cx = min(max(lcd_cx, min_lcd_cx), max_lcd_cx)
+    clamped_lcd_cy = min(max(lcd_cy, min_lcd_cy), max_lcd_cy)
+    if (clamped_lcd_cx != lcd_cx) or (clamped_lcd_cy != lcd_cy):
+        print(
+            "Note: clamped LCD_MOUNT_CENTER_OFFSET "
+            f"from ({lcd_off_x:.2f}, {lcd_off_y:.2f}) to "
+            f"({clamped_lcd_cx - base_lcd_cx:.2f}, {clamped_lcd_cy - base_lcd_cy:.2f}) "
+            "to keep LCD pocket inside the shell."
+        )
+    lcd_cx = clamped_lcd_cx
+    lcd_cy = clamped_lcd_cy
+    lip_bottom_z = outer_z - LCD_FRONT_LIP_THICKNESS
+    pocket_top_z = outer_z - LCD_FRONT_LIP_THICKNESS - 0.15
+    pocket_bottom_z = pocket_top_z - LCD_PCB_POCKET_DEPTH
+
+    if window_w > pocket_w or window_h > pocket_h:
+        raise RuntimeError("LCD window must fit within the LCD locating pocket.")
+    rear_window_w = window_w + 2.0 * LCD_WINDOW_REAR_RELIEF_CLEARANCE
+    rear_window_h = window_h + 2.0 * LCD_WINDOW_REAR_RELIEF_CLEARANCE
+    if rear_window_w > pocket_w or rear_window_h > pocket_h:
+        raise RuntimeError("LCD rear window relief must fit within the LCD locating pocket.")
+    top_only_cut_z_min = SPLIT_Z + 0.05
+
+    # True through-window: full-depth cut from exterior down into open interior.
     cutters.append(
         box_mesh(
-            (pocket_left, pocket_bottom, outer_z - LCD_FLUSH_DEPTH - 0.2),
-            (pocket_right, pocket_top, outer_z + 1.0),
+            (lcd_cx - window_w / 2.0, lcd_cy - window_h / 2.0, top_only_cut_z_min),
+            (lcd_cx + window_w / 2.0, lcd_cy + window_h / 2.0, outer_z + 1.5),
+        )
+    )
+    # Slightly larger rear relief up to lip plane keeps a clean front bezel only.
+    cutters.append(
+        box_mesh(
+            (lcd_cx - rear_window_w / 2.0, lcd_cy - rear_window_h / 2.0, top_only_cut_z_min),
+            (lcd_cx + rear_window_w / 2.0, lcd_cy + rear_window_h / 2.0, lip_bottom_z),
         )
     )
 
-    # Visible screen opening through the remaining roof thickness.
+    # Backside PCB locating pocket.
     cutters.append(
         box_mesh(
-            (window_left, window_bottom, outer_z - TOP_THICKNESS - 1.0),
-            (window_right, window_top, outer_z + 1.5),
+            (lcd_cx - pocket_w / 2.0, lcd_cy - pocket_h / 2.0, pocket_bottom_z),
+            (lcd_cx + pocket_w / 2.0, lcd_cy + pocket_h / 2.0, pocket_top_z),
         )
     )
-    # Minimal underside relief behind LCD rear port for solder/wire escape.
-    exw, exh = LCD_BACK_PORT_ESCAPE_SIZE
-    ecy = pocket_cy + LCD_BACK_PORT_ESCAPE_Y_OFFSET
-    cutters.append(
-        box_mesh(
-            (pocket_cx - exw / 2.0, ecy - exh / 2.0, outer_z - LCD_FLUSH_DEPTH - LCD_BACK_PORT_ESCAPE_DEPTH),
-            (pocket_cx + exw / 2.0, ecy + exh / 2.0, outer_z - LCD_FLUSH_DEPTH + 0.2),
+
+    # Optional local connector/header notch on the back side of the pocket.
+    if LCD_BACK_PORT_ESCAPE_ENABLED:
+        exw, exh = LCD_BACK_PORT_ESCAPE_SIZE
+        exo, eyo = LCD_BACK_PORT_ESCAPE_OFFSET
+        notch_cx = lcd_cx + exo
+        notch_cy = lcd_cy + eyo
+        notch_min_cx = lcd_cx - pocket_w / 2.0 + exw / 2.0
+        notch_max_cx = lcd_cx + pocket_w / 2.0 - exw / 2.0
+        notch_min_cy = lcd_cy - pocket_h / 2.0 + exh / 2.0
+        notch_max_cy = lcd_cy + pocket_h / 2.0 - exh / 2.0
+        clamped_notch_cx = min(max(notch_cx, notch_min_cx), notch_max_cx)
+        clamped_notch_cy = min(max(notch_cy, notch_min_cy), notch_max_cy)
+        if (clamped_notch_cx != notch_cx) or (clamped_notch_cy != notch_cy):
+            print(
+                "Note: clamped LCD_BACK_PORT_ESCAPE_OFFSET "
+                f"from ({exo:.2f}, {eyo:.2f}) to "
+                f"({clamped_notch_cx - lcd_cx:.2f}, {clamped_notch_cy - lcd_cy:.2f}) "
+                "to keep notch inside LCD pocket."
+            )
+        cutters.append(
+            box_mesh(
+                (
+                    clamped_notch_cx - exw / 2.0,
+                    clamped_notch_cy - exh / 2.0,
+                    pocket_bottom_z - 0.2,
+                ),
+                (
+                    clamped_notch_cx + exw / 2.0,
+                    clamped_notch_cy + exh / 2.0,
+                    pocket_bottom_z + LCD_BACK_PORT_ESCAPE_DEPTH,
+                ),
+            )
         )
-    )
-    # Underside studs for LCD mounting points (no through-holes in top shell).
+
     hdx, hdy = LCD_MOUNT_HOLE_SPACING
-    stud_tip_h = min(LCD_MOUNT_STUD_TIP_HEIGHT, max(0.0, LCD_MOUNT_STUD_HEIGHT - 0.6))
-    stud_stem_h = LCD_MOUNT_STUD_HEIGHT - stud_tip_h
-    stud_top_z = outer_z - LCD_FLUSH_DEPTH - 0.25
-    stud_bottom_z = stud_top_z - LCD_MOUNT_STUD_HEIGHT
+    boss_hole_len = LCD_MOUNT_BOSS_HEIGHT + LCD_MOUNT_BOSS_HOLE_DEPTH_EXTRA
     for sx in (-1.0, 1.0):
         for sy in (-1.0, 1.0):
-            hx = pocket_cx + sx * (hdx / 2.0)
-            hy = pocket_cy + sy * (hdy / 2.0)
-            if stud_stem_h > 0.0:
-                additions.append(
-                    cylinder_z(
-                        center_xyz=(hx, hy, stud_bottom_z + stud_stem_h / 2.0),
-                        radius=LCD_MOUNT_STUD_DIAMETER / 2.0,
-                        length=stud_stem_h,
-                    )
+            hx = lcd_cx + sx * (hdx / 2.0)
+            hy = lcd_cy + sy * (hdy / 2.0)
+            post_cut_additions.append(
+                cylinder_z(
+                    center_xyz=(hx, hy, pocket_bottom_z + LCD_MOUNT_BOSS_HEIGHT / 2.0),
+                    radius=LCD_MOUNT_BOSS_DIAMETER / 2.0,
+                    length=LCD_MOUNT_BOSS_HEIGHT,
                 )
-            if stud_tip_h > 0.0:
-                additions.append(
-                    cylinder_z(
-                        center_xyz=(hx, hy, stud_bottom_z + stud_stem_h + stud_tip_h / 2.0),
-                        radius=LCD_MOUNT_STUD_TIP_DIAMETER / 2.0,
-                        length=stud_tip_h,
-                    )
+            )
+            post_cut_cutters.append(
+                cylinder_z(
+                    center_xyz=(hx, hy, pocket_bottom_z + boss_hole_len / 2.0),
+                    radius=LCD_MOUNT_BOSS_HOLE_DIAMETER / 2.0,
+                    length=boss_hole_len,
                 )
-            # Small mushroom cap for positive retention through ~3.2 mm mounting holes.
-            if LCD_MOUNT_RETENTION_CAP_HEIGHT > 0.0:
-                additions.append(
-                    cylinder_z(
-                        center_xyz=(
-                            hx,
-                            hy,
-                            stud_bottom_z + stud_stem_h + stud_tip_h + LCD_MOUNT_RETENTION_CAP_HEIGHT / 2.0,
-                        ),
-                        radius=LCD_MOUNT_RETENTION_CAP_DIAMETER / 2.0,
-                        length=LCD_MOUNT_RETENTION_CAP_HEIGHT,
-                    )
-                )
+            )
 
     # Rotary encoder circle opening.
     enc_anchor = fps[ROTARY_HOLE_ANCHOR_REF]
@@ -494,6 +553,45 @@ def main() -> None:
             (outer_x - WALL + 0.6, side_y_anchor + body_y / 2.0, SIDE_SWITCH_Z + body_z / 2.0),
         )
     )
+
+    # Right-wall wire exit channel for LCD jumpers.
+    if LCD_WIRE_EXIT_CHANNEL_ENABLED:
+        ch_y_span, ch_z_span = LCD_WIRE_EXIT_CHANNEL_SIZE
+        ch_cy = lcd_cy + LCD_WIRE_EXIT_CHANNEL_Y_OFFSET
+        ch_cz = pocket_bottom_z + LCD_WIRE_EXIT_CHANNEL_Z_FROM_POCKET_BOTTOM
+        ch_cy = min(max(ch_cy, WALL + ch_y_span / 2.0), outer_y - WALL - ch_y_span / 2.0)
+        ch_cz = min(max(ch_cz, SPLIT_Z + ch_z_span / 2.0 + 0.2), outer_z - 0.8 - ch_z_span / 2.0)
+        cutters.append(
+            box_mesh(
+                (outer_x - WALL - 1.0, ch_cy - ch_y_span / 2.0, ch_cz - ch_z_span / 2.0),
+                (outer_x + 2.0, ch_cy + ch_y_span / 2.0, ch_cz + ch_z_span / 2.0),
+            )
+        )
+
+    # Internal zip-tie strain relief lug near the wire exit.
+    if LCD_STRAIN_RELIEF_ENABLED:
+        lug_dx, lug_y_span, lug_z_span = LCD_STRAIN_RELIEF_LUG_SIZE
+        slot_y_span, slot_z_span = LCD_STRAIN_RELIEF_SLOT_SIZE
+        if slot_y_span >= lug_y_span or slot_z_span >= lug_z_span:
+            raise RuntimeError("Strain-relief slot must be smaller than lug size.")
+        lug_cy = lcd_cy + LCD_STRAIN_RELIEF_Y_OFFSET
+        lug_cz = pocket_bottom_z + LCD_STRAIN_RELIEF_Z_FROM_POCKET_BOTTOM
+        lug_cy = min(max(lug_cy, WALL + lug_y_span / 2.0), outer_y - WALL - lug_y_span / 2.0)
+        lug_cz = min(max(lug_cz, SPLIT_Z + lug_z_span / 2.0 + 0.2), outer_z - 0.8 - lug_z_span / 2.0)
+        lug_x_max = outer_x - WALL - 0.25
+        lug_x_min = lug_x_max - lug_dx
+        additions.append(
+            box_mesh(
+                (lug_x_min, lug_cy - lug_y_span / 2.0, lug_cz - lug_z_span / 2.0),
+                (lug_x_max, lug_cy + lug_y_span / 2.0, lug_cz + lug_z_span / 2.0),
+            )
+        )
+        cutters.append(
+            box_mesh(
+                (lug_x_min - 0.3, lug_cy - slot_y_span / 2.0, lug_cz - slot_z_span / 2.0),
+                (lug_x_max + 0.3, lug_cy + slot_y_span / 2.0, lug_cz + slot_z_span / 2.0),
+            )
+        )
 
     # Bottom access hole for the tactile reset switch.
     reset_anchor = fps[RESET_BUTTON_ANCHOR_REF]
@@ -575,6 +673,10 @@ def main() -> None:
     if additions:
         shell = boolean_union([shell, *additions])
     shell = boolean_diff(shell, cutters)
+    if post_cut_additions:
+        shell = boolean_union([shell, *post_cut_additions])
+    if post_cut_cutters:
+        shell = boolean_diff(shell, post_cut_cutters)
 
     # Split into separate bottom and top pieces so they can be inspected independently.
     split_lower = box_mesh((-5.0, -5.0, -5.0), (outer_x + 5.0, outer_y + 5.0, SPLIT_Z))
@@ -599,9 +701,10 @@ def main() -> None:
     bottom = boolean_union([bottom, stand])
 
     # Rebase each part for printability.
-    for part in (bottom, top):
-        z_min = float(part.bounds[0][2])
-        part.apply_translation([0.0, 0.0, -z_min])
+    bottom_rebase_shift = -float(bottom.bounds[0][2])
+    top_rebase_shift = -float(top.bounds[0][2])
+    bottom.apply_translation([0.0, 0.0, bottom_rebase_shift])
+    top.apply_translation([0.0, 0.0, top_rebase_shift])
 
     # Add a perimeter lip/groove pair so top and bottom press/snap together.
     if SNAP_LIP_ENABLED:
@@ -697,6 +800,24 @@ def main() -> None:
     bottom.export(OUTPUT_BOTTOM_STL)
     top.export(OUTPUT_TOP_STL)
 
+    # Bottom-shell preview with PCB slab in mounting position.
+    pcb_min_x = WALL + PCB_CLEARANCE_XY
+    pcb_min_y = WALL + PCB_CLEARANCE_XY
+    pcb_max_x = pcb_min_x + board_w
+    pcb_max_y = pcb_min_y + board_h
+    pcb_thickness = 1.6
+    pcb_bottom_z = board_underside_z + bottom_rebase_shift
+    pcb_preview = box_mesh(
+        (pcb_min_x, pcb_min_y, pcb_bottom_z),
+        (pcb_max_x, pcb_max_y, pcb_bottom_z + pcb_thickness),
+    )
+    bottom_with_pcb_preview = trimesh.util.concatenate([bottom.copy(), pcb_preview])
+    bottom_with_pcb_preview.export(OUTPUT_BOTTOM_PCB_PREVIEW_STL)
+    pcb_preview_exploded = pcb_preview.copy()
+    pcb_preview_exploded.apply_translation([0.0, 0.0, PCB_PREVIEW_EXPLODE_Z])
+    bottom_with_pcb_exploded_preview = trimesh.util.concatenate([bottom.copy(), pcb_preview_exploded])
+    bottom_with_pcb_exploded_preview.export(OUTPUT_BOTTOM_PCB_EXPLODED_PREVIEW_STL)
+
     # Side-by-side preview STL.
     top_preview = top.copy()
     top_preview.apply_translation([outer_x + PREVIEW_GAP_X, 0.0, 0.0])
@@ -709,12 +830,78 @@ def main() -> None:
     assembled = trimesh.util.concatenate([bottom, assembled_top])
     assembled.export(OUTPUT_ASSEMBLED_STL)
 
+    # Optional standalone rear retainer plate with right-middle opening.
+    # Preserves top/bottom right material bands so right-side mounting holes remain usable.
+    if LCD_RETAINER_ENABLED:
+        plate_outer_w = LCD_PCB_OUTLINE_SIZE[0] + 2.0 * LCD_RETAINER_OUTER_MARGIN
+        plate_outer_h = LCD_PCB_OUTLINE_SIZE[1] + 2.0 * LCD_RETAINER_OUTER_MARGIN
+        plate_inner_w, plate_inner_h = LCD_RETAINER_WINDOW_SIZE
+        right_open_x = LCD_RETAINER_RIGHT_OPEN_X
+        right_open_y_span = LCD_RETAINER_RIGHT_OPEN_Y_SPAN
+        if plate_inner_w >= plate_outer_w or plate_inner_h >= plate_outer_h:
+            raise RuntimeError("LCD retainer window must be smaller than retainer outer size.")
+        if right_open_y_span <= 0.0 or right_open_y_span >= plate_outer_h:
+            raise RuntimeError("LCD retainer right-open Y span must be between 0 and plate outer height.")
+        min_open_x = -plate_outer_w / 2.0 + 1.0
+        max_open_x = plate_outer_w / 2.0 - 1.0
+        clamped_open_x = min(max(right_open_x, min_open_x), max_open_x)
+        if clamped_open_x != right_open_x:
+            print(
+                "Note: clamped LCD_RETAINER_RIGHT_OPEN_X "
+                f"from {right_open_x:.2f} to {clamped_open_x:.2f} to keep opening on plate."
+            )
+
+        plate = box_mesh(
+            (-plate_outer_w / 2.0, -plate_outer_h / 2.0, 0.0),
+            (plate_outer_w / 2.0, plate_outer_h / 2.0, LCD_RETAINER_THICKNESS),
+        )
+        plate_cutters: List[trimesh.Trimesh] = [
+            box_mesh(
+                (-plate_inner_w / 2.0, -plate_inner_h / 2.0, -0.4),
+                (plate_inner_w / 2.0, plate_inner_h / 2.0, LCD_RETAINER_THICKNESS + 0.4),
+            )
+        ]
+        # Remove middle-right material only (keeps right hole bands near top/bottom).
+        open_half_y = right_open_y_span / 2.0
+        plate_cutters.append(
+            box_mesh(
+                (clamped_open_x, -open_half_y, -0.4),
+                (plate_outer_w / 2.0 + 0.4, open_half_y, LCD_RETAINER_THICKNESS + 0.4),
+            )
+        )
+        for sx in (-1.0, 1.0):
+            for sy in (-1.0, 1.0):
+                hx = sx * (LCD_MOUNT_HOLE_SPACING[0] / 2.0)
+                hy = sy * (LCD_MOUNT_HOLE_SPACING[1] / 2.0)
+                plate_cutters.append(
+                    cylinder_z(
+                        center_xyz=(hx, hy, LCD_RETAINER_THICKNESS / 2.0),
+                        radius=LCD_RETAINER_HOLE_DIAMETER / 2.0,
+                        length=LCD_RETAINER_THICKNESS + 1.0,
+                    )
+                )
+        plate = boolean_diff(plate, plate_cutters)
+        # Warn if opening intersects right-side hole keep-out area.
+        safety_margin = (LCD_RETAINER_HOLE_DIAMETER / 2.0) + 0.8
+        right_hole_x = LCD_MOUNT_HOLE_SPACING[0] / 2.0
+        if clamped_open_x < (right_hole_x + safety_margin):
+            for sy in (-1.0, 1.0):
+                hy = sy * (LCD_MOUNT_HOLE_SPACING[1] / 2.0)
+                if abs(hy) < (open_half_y + safety_margin):
+                    print("Note: retainer right opening is close to right mounting holes; reduce Y span if needed.")
+                    break
+        plate.export(OUTPUT_LCD_RETAINER_STL)
+
     bb = bottom.bounds
     tb = top.bounds
     print(f"Wrote: {OUTPUT_BOTTOM_STL}")
     print(f"Wrote: {OUTPUT_TOP_STL}")
+    print(f"Wrote: {OUTPUT_BOTTOM_PCB_PREVIEW_STL}")
+    print(f"Wrote: {OUTPUT_BOTTOM_PCB_EXPLODED_PREVIEW_STL}")
     print(f"Wrote: {OUTPUT_SIDE_BY_SIDE_STL}")
     print(f"Wrote: {OUTPUT_ASSEMBLED_STL}")
+    if LCD_RETAINER_ENABLED:
+        print(f"Wrote: {OUTPUT_LCD_RETAINER_STL}")
     print(f"Bottom bounds mm: x={bb[1][0]-bb[0][0]:.2f}, y={bb[1][1]-bb[0][1]:.2f}, z={bb[1][2]-bb[0][2]:.2f}")
     print(f"Top bounds mm: x={tb[1][0]-tb[0][0]:.2f}, y={tb[1][1]-tb[0][1]:.2f}, z={tb[1][2]-tb[0][2]:.2f}")
 
