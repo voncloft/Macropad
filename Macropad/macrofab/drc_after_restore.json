@@ -1,0 +1,26 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-03-05T15:38:17-0500",
+    "kicad_version": "9.0.7",
+    "schematic_parity": [],
+    "source": "Macropad.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Items not allowed (keepout area 'U901_ANT_KEEP_OUT')",
+            "items": [
+                {
+                    "description": "Track [5V_SYS] on F.Cu, length 30.0691 mm",
+                    "pos": {
+                        "x": 55.945,
+                        "y": -39.08
+                    },
+                    "uuid": "4f0b0d53-19dc-4cb5-9bda-3ae66c834cb5"
+                }
+            ],
+            "severity": "error",
+            "type": "items_not_allowed"
+        }
+    ]
+}
