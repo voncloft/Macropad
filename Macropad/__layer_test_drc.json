@@ -1,0 +1,126 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-03-17T15:44:20-0400",
+    "kicad_version": "9.0.7",
+    "schematic_parity": [],
+    "source": "__layer_test.kicad_pcb",
+    "unconnected_items": [],
+    "violations": [
+        {
+            "description": "Drilled hole too close to other hole (board setup constraints min 0.2495 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [RGB_DATA] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 78.425,
+                        "y": -13.5
+                    },
+                    "uuid": "6cf3b939-988d-4f84-85e4-f79a9e9fe2f0"
+                },
+                {
+                    "description": "Via [RGB_DATA] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 78.123,
+                        "y": -13.5
+                    },
+                    "uuid": "e1c1e170-a12c-4681-a62d-28b8d73c8227"
+                }
+            ],
+            "severity": "warning",
+            "type": "hole_to_hole"
+        },
+        {
+            "description": "Drilled hole too close to other hole (board setup constraints min 0.2495 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [LCD_MOSI] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 84.0,
+                        "y": -19.37
+                    },
+                    "uuid": "538f2b1e-38f2-4224-a797-7248a96500f8"
+                },
+                {
+                    "description": "Via [SD_CS] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 84.0,
+                        "y": -19.5
+                    },
+                    "uuid": "7b5a292d-c7e9-4e75-a019-22c241f9490a"
+                }
+            ],
+            "severity": "warning",
+            "type": "hole_to_hole"
+        },
+        {
+            "description": "Drilled hole too close to other hole (board setup constraints min 0.2495 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [ENC_B] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 10.5,
+                        "y": -16.83
+                    },
+                    "uuid": "b44d7df4-3991-4edc-8587-f7ae0fae45db"
+                },
+                {
+                    "description": "PTH pad S2 [GND] of SW401",
+                    "pos": {
+                        "x": 10.5,
+                        "y": -17.5
+                    },
+                    "uuid": "d1f89231-1bf5-489f-b474-16479836dc12"
+                }
+            ],
+            "severity": "warning",
+            "type": "hole_to_hole"
+        },
+        {
+            "description": "Drilled hole too close to other hole (board setup constraints min 0.2495 mm; actual 0.2000 mm)",
+            "items": [
+                {
+                    "description": "Via [ENC_SW] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 7.0,
+                        "y": -18.1
+                    },
+                    "uuid": "014ccbbb-96f6-428f-9b77-b97cada11de6"
+                },
+                {
+                    "description": "Via [ENC_SW] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 7.0,
+                        "y": -17.5
+                    },
+                    "uuid": "0b8e5b3a-1944-4cbe-959c-d0d3888a4844"
+                }
+            ],
+            "severity": "warning",
+            "type": "hole_to_hole"
+        },
+        {
+            "description": "Drilled hole too close to other hole (board setup constraints min 0.2495 mm; actual 0.0000 mm)",
+            "items": [
+                {
+                    "description": "Via [ENC_B] on F.Cu - B.Cu",
+                    "pos": {
+                        "x": 10.5,
+                        "y": -16.83
+                    },
+                    "uuid": "b44d7df4-3991-4edc-8587-f7ae0fae45db"
+                },
+                {
+                    "description": "PTH pad S2 [GND] of SW401",
+                    "pos": {
+                        "x": 10.5,
+                        "y": -17.5
+                    },
+                    "uuid": "d1f89231-1bf5-489f-b474-16479836dc12"
+                }
+            ],
+            "severity": "warning",
+            "type": "hole_to_hole"
+        }
+    ]
+}

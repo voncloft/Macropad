@@ -2838,7 +2838,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 74.93) (xy 175.26 74.93)
+			(xy 168.91 74.93) (xy 175.26 74.93)
 		)
 		(stroke
 			(width 0)
@@ -2858,7 +2858,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 95.25) (xy 175.26 95.25)
+			(xy 168.91 95.25) (xy 175.26 95.25)
 		)
 		(stroke
 			(width 0)
@@ -2938,7 +2938,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 54.61) (xy 175.26 54.61)
+			(xy 168.91 54.61) (xy 175.26 54.61)
 		)
 		(stroke
 			(width 0)
@@ -3088,7 +3088,7 @@
 	)
 	(wire
 		(pts
-			(xy 167.64 115.57) (xy 175.26 115.57)
+			(xy 168.91 115.57) (xy 175.26 115.57)
 		)
 		(stroke
 			(width 0)
@@ -3989,7 +3989,7 @@
 	)
 	(global_label "ROW1"
 		(shape input)
-		(at 167.64 54.61 0)
+		(at 168.91 54.61 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -3999,7 +3999,7 @@
 		)
 		(uuid "be1d7283-d63c-432c-b870-1818ac23de5a")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 167.64 54.61 0)
+			(at 168.91 54.61 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4010,7 +4010,7 @@
 	)
 	(global_label "ROW4"
 		(shape input)
-		(at 167.64 115.57 0)
+		(at 168.91 115.57 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -4020,7 +4020,7 @@
 		)
 		(uuid "bf4552dc-cf57-4812-b974-58f9daa07967")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 167.64 115.57 0)
+			(at 168.91 115.57 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4115,7 +4115,7 @@
 	)
 	(global_label "ROW3"
 		(shape input)
-		(at 167.64 95.25 0)
+		(at 168.91 95.25 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -4125,7 +4125,7 @@
 		)
 		(uuid "e99523ae-3cdd-4744-b3de-7f9f06fba39c")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 167.64 95.25 0)
+			(at 168.91 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4136,7 +4136,7 @@
 	)
 	(global_label "ROW2"
 		(shape input)
-		(at 167.64 74.93 0)
+		(at 168.91 74.93 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -4146,7 +4146,7 @@
 		)
 		(uuid "e9ce2a8d-99dc-4dbe-864e-6760e623f71b")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 167.64 74.93 0)
+			(at 168.91 74.93 0)
 			(effects
 				(font
 					(size 1.27 1.27)

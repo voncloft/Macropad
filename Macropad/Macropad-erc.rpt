@@ -1,0 +1,17 @@
+ERC report (2026-03-16T23:57:00-0400, Encoding UTF8)
+
+***** Sheet /
+[pin_not_connected]: Pin not connected
+    ; error
+    @(168.91 mm, 54.61 mm): Symbol D17 Pin 2 [A, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(168.91 mm, 74.93 mm): Symbol D18 Pin 2 [A, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(168.91 mm, 95.25 mm): Symbol D19 Pin 2 [A, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(168.91 mm, 115.57 mm): Symbol D20 Pin 2 [A, Passive, Line]
+
+ ** ERC messages: 4  Errors 4  Warnings 0

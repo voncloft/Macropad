@@ -1,0 +1,10 @@
+{
+    "$schema": "https://schemas.kicad.org/drc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-03-17T01:15:28-0400",
+    "kicad_version": "9.0.7",
+    "schematic_parity": [],
+    "source": "__test_gnd_fix.kicad_pcb",
+    "unconnected_items": [],
+    "violations": []
+}
