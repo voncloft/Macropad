@@ -488,10 +488,10 @@
       "gencad": "",
       "idf": "",
       "netlist": "",
-      "plot": "../../Gerbers/",
+      "plot": "../../gerber-v3/",
       "pos_files": "../../Case/pcb files/",
       "specctra_dsn": "",
-      "step": "../../Case/pcb files/Macropad.step",
+      "step": "../../Macropad.step",
       "svg": "",
       "vrml": ""
     },

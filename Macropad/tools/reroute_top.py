@@ -288,24 +288,49 @@ def route_mcu_signals(board: pcbnew.BOARD) -> None:
     vertical_routes = [
         (14, (84.0, -14.29), 91.175, (91.175, -23.0), 0.25),
         (15, (84.0, -13.02), 98.25, (98.25, -30.54), 0.25),
-        (16, (84.0, -19.37), 40.42, (40.42, -6.5), 0.25),
         (17, (84.0, -20.64), 42.96, (42.96, -6.5), 0.25),
         (18, (84.0, -15.56), 5.5, (5.5, -2.5), 0.25),
-        (19, (84.0, -16.83), 10.5, (10.5, -2.5), 0.25),
-        (20, (84.0, -18.1), 7.0, (5.5, -17.5), 0.25),
         (84, (84.0, -23.18), 35.46, (35.46, -6.5), 0.25),
         (85, (84.0, -24.45), 32.92, (32.92, -6.5), 0.25),
     ]
     for net, src, trunk_x, dst, width in vertical_routes:
         route_to_vertical_trunk(board, net, src, trunk_x, dst, width)
 
-    route_escape_lane_to_pad(board, 91, (84.0, -11.75), -19.5, (50.5, -6.5), 0.25)
+    # SD_CS: escape to the right before dropping internal so it avoids both the TOUCH_SCL source stub and LCD_MOSI via corridor.
+    add_path(board, 91, F_CU, 0.25, [(84.0, -11.75), (85.0, -11.75), (85.0, -10.75)])
+    add_via(board, 91, 85.0, -10.75)
+    add_path(board, 91, IN1_CU, 0.25, [(85.0, -10.75), (50.5, -10.75)])
+    add_via(board, 91, 50.5, -10.75)
+    add_path(board, 91, IN2_CU, 0.25, [(50.5, -10.75), (50.5, -6.5)])
 
     route_escape_lane_to_pad(board, 86, (84.0, -26.5), -26.5, (30.38, -6.5), 0.25)
 
     route_escape_lane_to_pad(board, 87, (84.0, -27.75), -27.75, (60.66, -6.5), 0.25)
 
-    route_escape_lane_to_fcu(board, 12, (78.425, -10.5), -13.5, (78.123, -3.0), 0.25)
+    # RGB_DATA: use a single source via and a single destination via instead of two tightly-spaced vias at y=-13.5.
+    add_path(board, 12, F_CU, 0.25, [(78.425, -10.5), (78.425, -13.5)])
+    add_via(board, 12, 78.425, -13.5)
+    add_path(board, 12, IN2_CU, 0.25, [(78.425, -13.5), (78.425, -3.0)])
+    add_via(board, 12, 78.425, -3.0)
+    add_path(board, 12, F_CU, 0.25, [(78.425, -3.0), (78.123, -3.0)])
+
+    # LCD_MOSI: offset the source via so it does not share a drill corridor with SD_CS at the module edge.
+    add_path(board, 16, F_CU, 0.25, [(84.0, -19.37), (83.0, -19.37)])
+    add_via(board, 16, 83.0, -19.37)
+    add_path(board, 16, IN1_CU, 0.25, [(83.0, -19.37), (40.42, -19.37)])
+    add_via(board, 16, 40.42, -19.37)
+    add_path(board, 16, IN2_CU, 0.25, [(40.42, -19.37), (40.42, -6.5)])
+
+    # Encoder nets: land next to the through-hole pads and finish on B.Cu to avoid drill conflicts at the switch body.
+    add_via(board, 19, 84.0, -16.83)
+    add_path(board, 19, IN1_CU, 0.25, [(84.0, -16.83), (11.5, -16.83)])
+    add_via(board, 19, 11.5, -16.83)
+    add_path(board, 19, B_CU, 0.25, [(11.5, -16.83), (11.5, -2.5), (10.5, -2.5)])
+
+    add_via(board, 20, 84.0, -18.1)
+    add_path(board, 20, IN1_CU, 0.25, [(84.0, -18.1), (6.5, -18.1)])
+    add_via(board, 20, 6.5, -18.1)
+    add_path(board, 20, B_CU, 0.25, [(6.5, -18.1), (6.5, -17.5), (5.5, -17.5)])
 
     route_to_vertical_trunk(board, 99, (66.5, -13.02), 48.6, (50.375, -37.0), 0.2)
     add_track(board, 99, F_CU, 0.2, (50.375, -37.0), (50.375, -39.08))
